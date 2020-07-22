@@ -10,6 +10,6 @@ import UIKit
 
 struct Constants {
     struct Color {
-        static let lightGray75Opacity = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 0.7518728596)
+        static let gray75Opacity = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 0.7473244863)
     }
 }
