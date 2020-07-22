@@ -13,16 +13,6 @@ class MessageVC: UIViewController {
     
     
     // MARK: - Subviews
-    private lazy var logoutButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutPressed))
-        return button
-    }()
-    
-    private lazy var newMessageButton: UIBarButtonItem = {
-        let button = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(newMessagePressed))
-        return button
-    }()
-    
     private let tableView: UITableView = {
         let tv = UITableView()
         tv.register(UITableViewCell.self, forCellReuseIdentifier: "CellId")
@@ -38,8 +28,8 @@ class MessageVC: UIViewController {
     
     // MARK: - NavigationBar methods
     func setupNavBarButtons() {
-        navigationItem.leftBarButtonItem = logoutButton
-        navigationItem.rightBarButtonItem = newMessageButton
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutPressed))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(newMessagePressed))
     }
     
     // MARK: - Layout methods

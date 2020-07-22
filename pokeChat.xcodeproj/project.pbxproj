@@ -14,6 +14,7 @@
 		3DDE0AD724C7DB33008FB508 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3DDE0AD524C7DB33008FB508 /* LaunchScreen.storyboard */; };
 		3DDE0AE324C7DD5F008FB508 /* Ext - UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE224C7DD5F008FB508 /* Ext - UIView.swift */; };
 		3DDE0AE524C7E775008FB508 /* LoginRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */; };
+		3DDE0AE824C7EE26008FB508 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE724C7EE26008FB508 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		3DDE0AD824C7DB33008FB508 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3DDE0AE224C7DD5F008FB508 /* Ext - UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ext - UIView.swift"; sourceTree = "<group>"; };
 		3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterVC.swift; sourceTree = "<group>"; };
+		3DDE0AE724C7EE26008FB508 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,9 +99,18 @@
 		3DDE0AE124C7DD44008FB508 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				3DDE0AE224C7DD5F008FB508 /* Ext - UIView.swift */,
+				3DDE0AE624C7EE0C008FB508 /* Extensions */,
+				3DDE0AE724C7EE26008FB508 /* Constants.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		3DDE0AE624C7EE0C008FB508 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3DDE0AE224C7DD5F008FB508 /* Ext - UIView.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,6 +188,7 @@
 				3DDE0ACB24C7DB31008FB508 /* AppDelegate.swift in Sources */,
 				3DDE0AE524C7E775008FB508 /* LoginRegisterVC.swift in Sources */,
 				3DDE0ACD24C7DB31008FB508 /* SceneDelegate.swift in Sources */,
+				3DDE0AE824C7EE26008FB508 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
