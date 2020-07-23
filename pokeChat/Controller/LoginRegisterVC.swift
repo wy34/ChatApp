@@ -20,12 +20,14 @@ class LoginRegisterVC: UIViewController {
         let iv = UIImageView()
         iv.image = UIImage(named: "background")
         iv.contentMode = .scaleAspectFill
+        iv.alpha = 0.5
         return iv
     }()
     
     private let addImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = #imageLiteral(resourceName: "addImage")
+        iv.image = UIImage(systemName: "plus.square")
+        iv.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.701171875)
         iv.contentMode = .scaleAspectFill
         return iv
     }()
@@ -33,7 +35,7 @@ class LoginRegisterVC: UIViewController {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Welcome to PokeChat"
-        label.textColor = .systemYellow
+        label.textColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
         label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.font = UIFont.systemFont(ofSize: 35, weight: .bold)
         label.adjustsFontSizeToFitWidth = true
@@ -78,6 +80,10 @@ class LoginRegisterVC: UIViewController {
         
         loginRegisterButton.setTitle(loginRegisterSementedControl.titleForSegment(at: selectedIndex), for: .normal)
         
+        titleLabel.alpha = selectedIndex == 0 ? 1 : 0
+        
+        addImageView.alpha = selectedIndex == 0 ? 0 : 1
+        
         inputContainerHeightAnchor?.isActive = false
         inputContainerHeightAnchor = inputContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: selectedIndex == 0 ? 0.1 : 0.15)
         inputContainerHeightAnchor?.isActive = true
@@ -103,9 +109,14 @@ class LoginRegisterVC: UIViewController {
         backgroundImageView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: view.bottomAnchor, left: view.leftAnchor)
         
         view.addSubview(titleLabel)
-        titleLabel.setDimension(width: view.widthAnchor, wMult: 0.85)
         titleLabel.center(x: view.centerXAnchor)
         titleLabel.center(to: view, by: .centerY, withMultiplierOf: 0.5)
+        
+        view.addSubview(addImageView)
+        addImageView.alpha = 0
+        addImageView.setDimension(width: view.widthAnchor, height: view.widthAnchor, wMult: 0.4, hMult: 0.4)
+        addImageView.center(x: view.centerXAnchor)
+        addImageView.center(to: view, by: .centerY, withMultiplierOf: 0.5)
         
         view.addSubview(loginRegisterSementedControl)
         loginRegisterSementedControl.center(x: view.centerXAnchor, y: view.centerYAnchor, yPadding: -15)
@@ -131,7 +142,7 @@ class LoginRegisterVC: UIViewController {
         inputContainerView.addSubview(separator1)
         separator1.alpha = 0
         separator1.setDimension(hConst: 1)
-        separator1.anchor(top: nameTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
+        separator1.anchor(top: nameTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor, paddingRight: 5, paddingLeft: 5)
         
         inputContainerView.addSubview(emailTextField)
         emailTextField.anchor(top: nameTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
@@ -140,7 +151,7 @@ class LoginRegisterVC: UIViewController {
         
         inputContainerView.addSubview(separator2)
         separator2.setDimension(hConst: 1)
-        separator2.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
+        separator2.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor, paddingRight: 5, paddingLeft: 5)
         
         inputContainerView.addSubview(passwordTextField)
         passwordTextField.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
