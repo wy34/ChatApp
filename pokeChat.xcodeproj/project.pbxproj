@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3D4183F524C7F73500B39E92 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4183F424C7F73500B39E92 /* InputTextField.swift */; };
+		3D72E38B24C92F7C006A00B8 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */; };
+		3D72E38D24C930B4006A00B8 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D72E38C24C930B4006A00B8 /* LoginButton.swift */; };
 		3DDE0ACB24C7DB31008FB508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0ACA24C7DB31008FB508 /* AppDelegate.swift */; };
 		3DDE0ACD24C7DB31008FB508 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0ACC24C7DB31008FB508 /* SceneDelegate.swift */; };
 		3DDE0ACF24C7DB31008FB508 /* MessageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0ACE24C7DB31008FB508 /* MessageVC.swift */; };
@@ -20,6 +22,8 @@
 
 /* Begin PBXFileReference section */
 		3D4183F424C7F73500B39E92 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
+		3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
+		3D72E38C24C930B4006A00B8 /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		3DDE0AC724C7DB31008FB508 /* pokeChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pokeChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DDE0ACA24C7DB31008FB508 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3DDE0ACC24C7DB31008FB508 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				3D4183F424C7F73500B39E92 /* InputTextField.swift */,
+				3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */,
+				3D72E38C24C930B4006A00B8 /* LoginButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -187,7 +193,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				3DDE0AE324C7DD5F008FB508 /* Ext - UIView.swift in Sources */,
+				3D72E38D24C930B4006A00B8 /* LoginButton.swift in Sources */,
 				3DDE0ACF24C7DB31008FB508 /* MessageVC.swift in Sources */,
+				3D72E38B24C92F7C006A00B8 /* SeparatorView.swift in Sources */,
 				3DDE0ACB24C7DB31008FB508 /* AppDelegate.swift in Sources */,
 				3DDE0AE524C7E775008FB508 /* LoginRegisterVC.swift in Sources */,
 				3DDE0ACD24C7DB31008FB508 /* SceneDelegate.swift in Sources */,

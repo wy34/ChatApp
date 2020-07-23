@@ -12,6 +12,7 @@ class InputTextField: UITextField {
     // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -20,17 +21,15 @@ class InputTextField: UITextField {
     
     init(placeholder: String) {
         super.init(frame: .zero)
-        configure(placeholder: placeholder)
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
+        configure()
     }
     
     // MARK: - Configure method
-    func configure(placeholder: String) {
+    func configure() {
         textColor = .white
         let padding = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: frame.size.height))
         leftView = padding
         leftViewMode = .always
-        
-        attributedPlaceholder = NSAttributedString(string: placeholder, attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-        attributedPlaceholder = attributedPlaceholder
     }
 }

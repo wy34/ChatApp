@@ -35,6 +35,7 @@ class LoginRegisterVC: UIViewController {
         let grayText = [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
         sc.setTitleTextAttributes(whiteText, for: .normal)
         sc.setTitleTextAttributes(grayText, for: .selected)
+        sc.addTarget(self, action: #selector(handleSegmentSwitch), for: .valueChanged)
         return sc
     }()
     
@@ -45,18 +46,11 @@ class LoginRegisterVC: UIViewController {
         return view
     }()
     
-    private let loginRegisterButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setTitle("Login", for: .normal)
-        button.backgroundColor = Constants.Color.gray75Opacity
-        button.layer.cornerRadius = 10
-        let title = NSAttributedString(string: "Login", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20, weight: .bold)])
-        button.setAttributedTitle(title, for: .normal)
-        return button
-    }()
-    
+    private let loginRegisterButton = LoginButton(type: .system)
     private let nameTextField = InputTextField(placeholder: "Name")
+    private let separator1 = SeparatorView()
     private let emailTextField = InputTextField(placeholder: "Email")
+    private let separator2 = SeparatorView()
     private let passwordTextField = InputTextField(placeholder: "Password")
     
     // MARK: - Lifecycle
@@ -65,7 +59,14 @@ class LoginRegisterVC: UIViewController {
         layoutViews()
     }
     
-    // MARK: - Layout methods
+    // MARK: - Selectors
+    @objc func handleSegmentSwitch() {
+        let selectedIndex = loginRegisterSementedControl.selectedSegmentIndex
+        let title = loginRegisterSementedControl.titleForSegment(at: selectedIndex)
+        loginRegisterButton.setTitle(title, for: .normal)
+    }
+    
+    // MARK: - Layout method
     func layoutViews() {
         view.addSubview(backgroundImageView)
         backgroundImageView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: view.bottomAnchor, left: view.leftAnchor)
@@ -84,6 +85,7 @@ class LoginRegisterVC: UIViewController {
         inputContainerView.setDimension(width: loginRegisterSementedControl.widthAnchor, height: view.heightAnchor, hMult: 0.15)
         inputContainerView.center(x: view.centerXAnchor)
         
+        
         view.addSubview(loginRegisterButton)
         loginRegisterButton.anchor(top: inputContainerView.bottomAnchor, paddingTop: 15)
         loginRegisterButton.setDimension(width: loginRegisterSementedControl.widthAnchor, height: view.heightAnchor, hMult: 0.05)
@@ -93,9 +95,17 @@ class LoginRegisterVC: UIViewController {
         nameTextField.anchor(top: inputContainerView.topAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
         nameTextField.setDimension(height: inputContainerView.heightAnchor, hMult: 0.333)
         
+        inputContainerView.addSubview(separator1)
+        separator1.setDimension(hConst: 1)
+        separator1.anchor(top: nameTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
+        
         inputContainerView.addSubview(emailTextField)
         emailTextField.anchor(top: nameTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
         emailTextField.setDimension(height: inputContainerView.heightAnchor, hMult: 0.333)
+        
+        inputContainerView.addSubview(separator2)
+        separator2.setDimension(hConst: 1)
+        separator2.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
         
         inputContainerView.addSubview(passwordTextField)
         passwordTextField.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
