@@ -24,18 +24,22 @@ class LoginRegisterVC: UIViewController {
         return iv
     }()
     
-    private let addImageView: UIImageView = {
+    private lazy var addImageView: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(systemName: "plus.square")
         iv.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.701171875)
         iv.contentMode = .scaleAspectFill
+        iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showImagePickerView)))
+        iv.layer.cornerRadius = 25
+        iv.clipsToBounds = true
         return iv
     }()
     
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Welcome to PokeChat"
-        label.textColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1)
+        label.textColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 0.8)
         label.font = UIFont.preferredFont(forTextStyle: .headline)
         label.font = UIFont.systemFont(ofSize: 35, weight: .bold)
         label.adjustsFontSizeToFitWidth = true
@@ -76,6 +80,11 @@ class LoginRegisterVC: UIViewController {
     
     // MARK: - Selectors
     @objc func handleSegmentSwitch() {
+        nameTextField.text = ""
+        emailTextField.text = ""
+        passwordTextField.text = ""
+        addImageView.image = UIImage(systemName: "plus.square")
+        
         let selectedIndex = loginRegisterSementedControl.selectedSegmentIndex
         
         loginRegisterButton.setTitle(loginRegisterSementedControl.titleForSegment(at: selectedIndex), for: .normal)
@@ -101,6 +110,14 @@ class LoginRegisterVC: UIViewController {
         passwordTextFieldHeightAnchor?.isActive = true
         
         separator1.alpha = selectedIndex == 0 ? 0 : 1
+    }
+    
+    @objc func showImagePickerView() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = true
+        present(imagePicker, animated: true)
     }
     
     // MARK: - Layout method
@@ -157,5 +174,14 @@ class LoginRegisterVC: UIViewController {
         passwordTextField.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
         passwordTextFieldHeightAnchor = passwordTextField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 0.5)
         passwordTextFieldHeightAnchor?.isActive = true
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate
+extension LoginRegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let selectedImage = info[.editedImage] as? UIImage else { return }
+        self.addImageView.image = selectedImage
+        dismiss(animated: true, completion: nil)
     }
 }
