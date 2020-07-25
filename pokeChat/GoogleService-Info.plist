@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>853501284157-2f4cc51p04oa40h62lldo65ivftga1en.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.853501284157-2f4cc51p04oa40h62lldo65ivftga1en</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDMlvAFEHcOg1CzLakQgjZ2NtU38aSktEY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>853501284157</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.williamyeung.pokeChat</string>
+	<key>PROJECT_ID</key>
+	<string>pokechat-3aba2</string>
+	<key>STORAGE_BUCKET</key>
+	<string>pokechat-3aba2.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:853501284157:ios:177cbad2b4a6b65a4dbf54</string>
+	<key>DATABASE_URL</key>
+	<string>https://pokechat-3aba2.firebaseio.com</string>
+</dict>
+</plist>

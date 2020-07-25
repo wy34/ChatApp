@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class MessageVC: UIViewController {
     // MARK: - Variables/Constants
@@ -24,6 +25,16 @@ class MessageVC: UIViewController {
         super.viewDidLoad()
         setupNavBarButtons()
         layoutViews()
+        checkIfUserIsLoggedIn()
+    }
+    
+    // MARK: - Login methods
+    func checkIfUserIsLoggedIn() {
+        if Auth.auth().currentUser == nil {
+            let loginRegisterVc = LoginRegisterVC()
+            loginRegisterVc.modalPresentationStyle = .fullScreen
+            present(loginRegisterVc, animated: true)
+        }
     }
     
     // MARK: - NavigationBar methods

@@ -16,55 +16,11 @@ class LoginRegisterVC: UIViewController {
     var passwordTextFieldHeightAnchor: NSLayoutConstraint?
     
     // MARK: - Subviews
-    private let backgroundImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage(named: "background")
-        iv.contentMode = .scaleAspectFill
-        iv.alpha = 0.5
-        return iv
-    }()
-    
-    private lazy var addImageView: UIImageView = {
-        let iv = UIImageView()
-        iv.image = UIImage(systemName: "plus.square")
-        iv.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.701171875)
-        iv.contentMode = .scaleAspectFill
-        iv.isUserInteractionEnabled = true
-        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showImagePickerView)))
-        iv.layer.cornerRadius = 25
-        iv.clipsToBounds = true
-        return iv
-    }()
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Welcome to PokeChat"
-        label.textColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 0.8)
-        label.font = UIFont.preferredFont(forTextStyle: .headline)
-        label.font = UIFont.systemFont(ofSize: 35, weight: .bold)
-        label.adjustsFontSizeToFitWidth = true
-        return label
-    }()
-    
-    private let loginRegisterSementedControl: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["Login", "Register"])
-        sc.backgroundColor = Constants.Color.gray75Opacity
-        sc.selectedSegmentIndex = 0
-        let whiteText = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        let grayText = [NSAttributedString.Key.foregroundColor: UIColor.lightGray]
-        sc.setTitleTextAttributes(whiteText, for: .normal)
-        sc.setTitleTextAttributes(grayText, for: .selected)
-        sc.addTarget(self, action: #selector(handleSegmentSwitch), for: .valueChanged)
-        return sc
-    }()
-    
-    private let inputContainerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = Constants.Color.gray75Opacity
-        view.layer.cornerRadius = 10
-        return view
-    }()
-    
+    private let backgroundImageView = UIImageView()
+    private let profileImageView = UIImageView()
+    private let titleLabel = UILabel()
+    private let loginRegisterSementedControl = LoginRegisterSegmentedControl(items: ["Login", "Register"])
+    private let inputContainerView = UIView()
     private let loginRegisterButton = LoginButton(type: .system)
     private let nameTextField = InputTextField(placeholder: "Name")
     private let separator1 = SeparatorView()
@@ -75,7 +31,113 @@ class LoginRegisterVC: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        layoutViews()
+        setupSubviews()
+    }
+    
+    // MARK: - Subview configuration methods
+    func setupSubviews() {
+        setupBackgroundImageView()
+        setupTitleLabel()
+        setupProfileImageView()
+        setupLoginRegisterSegmentedControl()
+        setupInputContainerView()
+        setupLoginRegisterButton()
+        setupInputTextFields()
+        setupInputSeparators()
+    }
+    
+    func setupBackgroundImageView() {
+        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.alpha = 0.5
+        
+        view.addSubview(backgroundImageView)
+        backgroundImageView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: view.bottomAnchor, left: view.leftAnchor)
+    }
+    
+    func setupTitleLabel() {
+        titleLabel.text = "Welcome to PokeChat"
+        titleLabel.textColor = #colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 0.8)
+        titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
+        titleLabel.font = UIFont.systemFont(ofSize: 35, weight: .bold)
+        titleLabel.adjustsFontSizeToFitWidth = true
+        
+        view.addSubview(titleLabel)
+        titleLabel.center(x: view.centerXAnchor)
+        titleLabel.center(to: view, by: .centerY, withMultiplierOf: 0.5)
+    }
+    
+    func setupProfileImageView() {
+        profileImageView.image = UIImage(systemName: "plus.square")
+        profileImageView.tintColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 0.701171875)
+        profileImageView.contentMode = .scaleAspectFill
+        profileImageView.isUserInteractionEnabled = true
+        profileImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showImagePickerView)))
+        profileImageView.layer.cornerRadius = 25
+        profileImageView.clipsToBounds = true
+
+        view.addSubview(profileImageView)
+        profileImageView.alpha = 0
+        profileImageView.setDimension(width: view.widthAnchor, height: view.widthAnchor, wMult: 0.4, hMult: 0.4)
+        profileImageView.center(x: view.centerXAnchor)
+        profileImageView.center(to: view, by: .centerY, withMultiplierOf: 0.5)
+    }
+    
+    func setupLoginRegisterSegmentedControl() {
+        loginRegisterSementedControl.addTarget(self, action: #selector(handleSegmentSwitch), for: .valueChanged)
+        
+        view.addSubview(loginRegisterSementedControl)
+        loginRegisterSementedControl.center(x: view.centerXAnchor, y: view.centerYAnchor, yPadding: -15)
+        loginRegisterSementedControl.setDimension(width: view.widthAnchor, height: view.heightAnchor, wMult: 0.9, hMult: 0.04)
+    }
+    
+    func setupInputContainerView() {
+        inputContainerView.backgroundColor = Constants.Color.gray75Opacity
+        inputContainerView.layer.cornerRadius = 10
+        
+        view.addSubview(inputContainerView)
+        inputContainerView.anchor(top: loginRegisterSementedControl.bottomAnchor, paddingTop: 15)
+        inputContainerView.setDimension(width: loginRegisterSementedControl.widthAnchor)
+        inputContainerView.center(x: view.centerXAnchor)
+        inputContainerHeightAnchor = inputContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1)
+        inputContainerHeightAnchor?.isActive = true
+    }
+    
+    func setupLoginRegisterButton() {
+        loginRegisterButton.addTarget(self, action: #selector(handleLoginRegister), for: .touchUpInside)
+        
+        view.addSubview(loginRegisterButton)
+        loginRegisterButton.anchor(top: inputContainerView.bottomAnchor, paddingTop: 15)
+        loginRegisterButton.setDimension(width: loginRegisterSementedControl.widthAnchor, height: view.heightAnchor, hMult: 0.05)
+        loginRegisterButton.center(x: view.centerXAnchor)
+    }
+    
+    func setupInputTextFields() {
+        inputContainerView.addSubview(nameTextField)
+        nameTextField.anchor(top: inputContainerView.topAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
+        nameTextFieldHeightAnchor = nameTextField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 0)
+        nameTextFieldHeightAnchor?.isActive = true
+        
+        inputContainerView.addSubview(emailTextField)
+        emailTextField.anchor(top: nameTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
+        emailTextFieldHeightAnchor = emailTextField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 0.5)
+        emailTextFieldHeightAnchor?.isActive = true
+        
+        inputContainerView.addSubview(passwordTextField)
+        passwordTextField.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
+        passwordTextFieldHeightAnchor = passwordTextField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 0.5)
+        passwordTextFieldHeightAnchor?.isActive = true
+    }
+    
+    func setupInputSeparators() {
+        inputContainerView.addSubview(separator1)
+        separator1.alpha = 0
+        separator1.setDimension(hConst: 1)
+        separator1.anchor(top: nameTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor, paddingRight: 5, paddingLeft: 5)
+        
+        inputContainerView.addSubview(separator2)
+        separator2.setDimension(hConst: 1)
+        separator2.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor, paddingRight: 5, paddingLeft: 5)
     }
     
     // MARK: - Selectors
@@ -83,7 +145,7 @@ class LoginRegisterVC: UIViewController {
         nameTextField.text = ""
         emailTextField.text = ""
         passwordTextField.text = ""
-        addImageView.image = UIImage(systemName: "plus.square")
+        profileImageView.image = UIImage(systemName: "plus.square")
         
         let selectedIndex = loginRegisterSementedControl.selectedSegmentIndex
         
@@ -91,7 +153,7 @@ class LoginRegisterVC: UIViewController {
         
         titleLabel.alpha = selectedIndex == 0 ? 1 : 0
         
-        addImageView.alpha = selectedIndex == 0 ? 0 : 1
+        profileImageView.alpha = selectedIndex == 0 ? 0 : 1
         
         inputContainerHeightAnchor?.isActive = false
         inputContainerHeightAnchor = inputContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: selectedIndex == 0 ? 0.1 : 0.15)
@@ -120,60 +182,20 @@ class LoginRegisterVC: UIViewController {
         present(imagePicker, animated: true)
     }
     
-    // MARK: - Layout method
-    func layoutViews() {
-        view.addSubview(backgroundImageView)
-        backgroundImageView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: view.bottomAnchor, left: view.leftAnchor)
-        
-        view.addSubview(titleLabel)
-        titleLabel.center(x: view.centerXAnchor)
-        titleLabel.center(to: view, by: .centerY, withMultiplierOf: 0.5)
-        
-        view.addSubview(addImageView)
-        addImageView.alpha = 0
-        addImageView.setDimension(width: view.widthAnchor, height: view.widthAnchor, wMult: 0.4, hMult: 0.4)
-        addImageView.center(x: view.centerXAnchor)
-        addImageView.center(to: view, by: .centerY, withMultiplierOf: 0.5)
-        
-        view.addSubview(loginRegisterSementedControl)
-        loginRegisterSementedControl.center(x: view.centerXAnchor, y: view.centerYAnchor, yPadding: -15)
-        loginRegisterSementedControl.setDimension(width: view.widthAnchor, height: view.heightAnchor, wMult: 0.9, hMult: 0.04)
-        
-        view.addSubview(inputContainerView)
-        inputContainerView.anchor(top: loginRegisterSementedControl.bottomAnchor, paddingTop: 15)
-        inputContainerView.setDimension(width: loginRegisterSementedControl.widthAnchor)
-        inputContainerView.center(x: view.centerXAnchor)
-        inputContainerHeightAnchor = inputContainerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1)
-        inputContainerHeightAnchor?.isActive = true
-        
-        view.addSubview(loginRegisterButton)
-        loginRegisterButton.anchor(top: inputContainerView.bottomAnchor, paddingTop: 15)
-        loginRegisterButton.setDimension(width: loginRegisterSementedControl.widthAnchor, height: view.heightAnchor, hMult: 0.05)
-        loginRegisterButton.center(x: view.centerXAnchor)
-        
-        inputContainerView.addSubview(nameTextField)
-        nameTextField.anchor(top: inputContainerView.topAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
-        nameTextFieldHeightAnchor = nameTextField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 0)
-        nameTextFieldHeightAnchor?.isActive = true
-        
-        inputContainerView.addSubview(separator1)
-        separator1.alpha = 0
-        separator1.setDimension(hConst: 1)
-        separator1.anchor(top: nameTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor, paddingRight: 5, paddingLeft: 5)
-        
-        inputContainerView.addSubview(emailTextField)
-        emailTextField.anchor(top: nameTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
-        emailTextFieldHeightAnchor = emailTextField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 0.5)
-        emailTextFieldHeightAnchor?.isActive = true
-        
-        inputContainerView.addSubview(separator2)
-        separator2.setDimension(hConst: 1)
-        separator2.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor, paddingRight: 5, paddingLeft: 5)
-        
-        inputContainerView.addSubview(passwordTextField)
-        passwordTextField.anchor(top: emailTextField.bottomAnchor, right: inputContainerView.rightAnchor, left: inputContainerView.leftAnchor)
-        passwordTextFieldHeightAnchor = passwordTextField.heightAnchor.constraint(equalTo: inputContainerView.heightAnchor, multiplier: 0.5)
-        passwordTextFieldHeightAnchor?.isActive = true
+    @objc func handleLoginRegister() {
+        if loginRegisterSementedControl.selectedSegmentIndex == 0 {
+            guard let email = emailTextField.text, let password = passwordTextField.text else { return }
+            Authentication.shared.signIn(withEmail: email, andPassword: password) { (result) in
+                switch result {
+                    case .success(_):
+                        self.dismiss(animated: true, completion: nil)
+                    case .failure(let error):
+                        print(error.rawValue)
+                }
+            }
+        } else {
+            
+        }
     }
 }
 
@@ -181,7 +203,7 @@ class LoginRegisterVC: UIViewController {
 extension LoginRegisterVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let selectedImage = info[.editedImage] as? UIImage else { return }
-        self.addImageView.image = selectedImage
+        self.profileImageView.image = selectedImage
         dismiss(animated: true, completion: nil)
     }
 }

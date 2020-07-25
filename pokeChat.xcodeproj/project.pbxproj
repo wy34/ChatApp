@@ -3,11 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		3D4183F524C7F73500B39E92 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4183F424C7F73500B39E92 /* InputTextField.swift */; };
+		3D45548224CA9285005EEF43 /* LoginRegisterSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D45548124CA9285005EEF43 /* LoginRegisterSegmentedControl.swift */; };
 		3D72E38B24C92F7C006A00B8 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */; };
 		3D72E38D24C930B4006A00B8 /* LoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D72E38C24C930B4006A00B8 /* LoginButton.swift */; };
 		3DDE0ACB24C7DB31008FB508 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0ACA24C7DB31008FB508 /* AppDelegate.swift */; };
@@ -18,10 +19,15 @@
 		3DDE0AE324C7DD5F008FB508 /* Ext - UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE224C7DD5F008FB508 /* Ext - UIView.swift */; };
 		3DDE0AE524C7E775008FB508 /* LoginRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */; };
 		3DDE0AE824C7EE26008FB508 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE724C7EE26008FB508 /* Constants.swift */; };
+		3DE249F924CBBC03006D9493 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DE249F824CBBC03006D9493 /* GoogleService-Info.plist */; };
+		3DE249FC24CBBF22006D9493 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FB24CBBF22006D9493 /* Authentication.swift */; };
+		3DE249FE24CBCA4E006D9493 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FD24CBCA4E006D9493 /* ErrorMessage.swift */; };
+		5B4F8C5746049F4155232887 /* Pods_pokeChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A80853E4A8CB88AB764895AE /* Pods_pokeChat.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3D4183F424C7F73500B39E92 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
+		3D45548124CA9285005EEF43 /* LoginRegisterSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterSegmentedControl.swift; sourceTree = "<group>"; };
 		3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		3D72E38C24C930B4006A00B8 /* LoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginButton.swift; sourceTree = "<group>"; };
 		3DDE0AC724C7DB31008FB508 /* pokeChat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = pokeChat.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -34,6 +40,12 @@
 		3DDE0AE224C7DD5F008FB508 /* Ext - UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ext - UIView.swift"; sourceTree = "<group>"; };
 		3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterVC.swift; sourceTree = "<group>"; };
 		3DDE0AE724C7EE26008FB508 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		3DE249F824CBBC03006D9493 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		3DE249FB24CBBF22006D9493 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		3DE249FD24CBCA4E006D9493 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
+		70CD1F90B7F9BA975903EE93 /* Pods-pokeChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pokeChat.debug.xcconfig"; path = "Target Support Files/Pods-pokeChat/Pods-pokeChat.debug.xcconfig"; sourceTree = "<group>"; };
+		A80853E4A8CB88AB764895AE /* Pods_pokeChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pokeChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A934547F562C268C0BBCA98C /* Pods-pokeChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pokeChat.release.xcconfig"; path = "Target Support Files/Pods-pokeChat/Pods-pokeChat.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -41,17 +53,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5B4F8C5746049F4155232887 /* Pods_pokeChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		16A4090DCA38ABB1C6946299 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				70CD1F90B7F9BA975903EE93 /* Pods-pokeChat.debug.xcconfig */,
+				A934547F562C268C0BBCA98C /* Pods-pokeChat.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		3DDE0ABE24C7DB31008FB508 = {
 			isa = PBXGroup;
 			children = (
 				3DDE0AC924C7DB31008FB508 /* pokeChat */,
 				3DDE0AC824C7DB31008FB508 /* Products */,
+				16A4090DCA38ABB1C6946299 /* Pods */,
+				9E99343EA979B1B7A450AFD5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -66,6 +90,7 @@
 		3DDE0AC924C7DB31008FB508 /* pokeChat */ = {
 			isa = PBXGroup;
 			children = (
+				3DE249FA24CBBF16006D9493 /* Services */,
 				3DDE0AE124C7DD44008FB508 /* Utilities */,
 				3DDE0ADE24C7DD11008FB508 /* Model */,
 				3DDE0ADF24C7DD17008FB508 /* View */,
@@ -75,6 +100,7 @@
 				3DDE0AD324C7DB33008FB508 /* Assets.xcassets */,
 				3DDE0AD524C7DB33008FB508 /* LaunchScreen.storyboard */,
 				3DDE0AD824C7DB33008FB508 /* Info.plist */,
+				3DE249F824CBBC03006D9493 /* GoogleService-Info.plist */,
 			);
 			path = pokeChat;
 			sourceTree = "<group>";
@@ -92,6 +118,7 @@
 				3D4183F424C7F73500B39E92 /* InputTextField.swift */,
 				3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */,
 				3D72E38C24C930B4006A00B8 /* LoginButton.swift */,
+				3D45548124CA9285005EEF43 /* LoginRegisterSegmentedControl.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -110,6 +137,7 @@
 			children = (
 				3DDE0AE624C7EE0C008FB508 /* Extensions */,
 				3DDE0AE724C7EE26008FB508 /* Constants.swift */,
+				3DE249FD24CBCA4E006D9493 /* ErrorMessage.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -122,6 +150,22 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		3DE249FA24CBBF16006D9493 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				3DE249FB24CBBF22006D9493 /* Authentication.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		9E99343EA979B1B7A450AFD5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A80853E4A8CB88AB764895AE /* Pods_pokeChat.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -129,9 +173,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3DDE0ADB24C7DB33008FB508 /* Build configuration list for PBXNativeTarget "pokeChat" */;
 			buildPhases = (
+				532DAE7B6A1D775C4A855A3D /* [CP] Check Pods Manifest.lock */,
 				3DDE0AC324C7DB31008FB508 /* Sources */,
 				3DDE0AC424C7DB31008FB508 /* Frameworks */,
 				3DDE0AC524C7DB31008FB508 /* Resources */,
+				D48D3027D6680F8F54A368B3 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -182,10 +228,53 @@
 			files = (
 				3DDE0AD724C7DB33008FB508 /* LaunchScreen.storyboard in Resources */,
 				3DDE0AD424C7DB33008FB508 /* Assets.xcassets in Resources */,
+				3DE249F924CBBC03006D9493 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		532DAE7B6A1D775C4A855A3D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-pokeChat-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D48D3027D6680F8F54A368B3 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-pokeChat/Pods-pokeChat-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-pokeChat/Pods-pokeChat-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-pokeChat/Pods-pokeChat-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		3DDE0AC324C7DB31008FB508 /* Sources */ = {
@@ -196,9 +285,12 @@
 				3D72E38D24C930B4006A00B8 /* LoginButton.swift in Sources */,
 				3DDE0ACF24C7DB31008FB508 /* MessageVC.swift in Sources */,
 				3D72E38B24C92F7C006A00B8 /* SeparatorView.swift in Sources */,
+				3DE249FE24CBCA4E006D9493 /* ErrorMessage.swift in Sources */,
+				3DE249FC24CBBF22006D9493 /* Authentication.swift in Sources */,
 				3DDE0ACB24C7DB31008FB508 /* AppDelegate.swift in Sources */,
 				3DDE0AE524C7E775008FB508 /* LoginRegisterVC.swift in Sources */,
 				3DDE0ACD24C7DB31008FB508 /* SceneDelegate.swift in Sources */,
+				3D45548224CA9285005EEF43 /* LoginRegisterSegmentedControl.swift in Sources */,
 				3D4183F524C7F73500B39E92 /* InputTextField.swift in Sources */,
 				3DDE0AE824C7EE26008FB508 /* Constants.swift in Sources */,
 			);
@@ -334,6 +426,7 @@
 		};
 		3DDE0ADC24C7DB33008FB508 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 70CD1F90B7F9BA975903EE93 /* Pods-pokeChat.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -352,6 +445,7 @@
 		};
 		3DDE0ADD24C7DB33008FB508 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A934547F562C268C0BBCA98C /* Pods-pokeChat.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
