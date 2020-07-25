@@ -20,8 +20,10 @@
 		3DDE0AE524C7E775008FB508 /* LoginRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */; };
 		3DDE0AE824C7EE26008FB508 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE724C7EE26008FB508 /* Constants.swift */; };
 		3DE249F924CBBC03006D9493 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DE249F824CBBC03006D9493 /* GoogleService-Info.plist */; };
-		3DE249FC24CBBF22006D9493 /* Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FB24CBBF22006D9493 /* Authentication.swift */; };
+		3DE249FC24CBBF22006D9493 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FB24CBBF22006D9493 /* AuthManager.swift */; };
 		3DE249FE24CBCA4E006D9493 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FD24CBCA4E006D9493 /* ErrorMessage.swift */; };
+		3DE24A0024CBE239006D9493 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FF24CBE239006D9493 /* DatabaseManager.swift */; };
+		3DE24A0224CBE44E006D9493 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE24A0124CBE44E006D9493 /* User.swift */; };
 		5B4F8C5746049F4155232887 /* Pods_pokeChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A80853E4A8CB88AB764895AE /* Pods_pokeChat.framework */; };
 /* End PBXBuildFile section */
 
@@ -41,8 +43,10 @@
 		3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterVC.swift; sourceTree = "<group>"; };
 		3DDE0AE724C7EE26008FB508 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		3DE249F824CBBC03006D9493 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		3DE249FB24CBBF22006D9493 /* Authentication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authentication.swift; sourceTree = "<group>"; };
+		3DE249FB24CBBF22006D9493 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		3DE249FD24CBCA4E006D9493 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
+		3DE249FF24CBE239006D9493 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		3DE24A0124CBE44E006D9493 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		70CD1F90B7F9BA975903EE93 /* Pods-pokeChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pokeChat.debug.xcconfig"; path = "Target Support Files/Pods-pokeChat/Pods-pokeChat.debug.xcconfig"; sourceTree = "<group>"; };
 		A80853E4A8CB88AB764895AE /* Pods_pokeChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pokeChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A934547F562C268C0BBCA98C /* Pods-pokeChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pokeChat.release.xcconfig"; path = "Target Support Files/Pods-pokeChat/Pods-pokeChat.release.xcconfig"; sourceTree = "<group>"; };
@@ -108,6 +112,7 @@
 		3DDE0ADE24C7DD11008FB508 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				3DE24A0124CBE44E006D9493 /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -153,7 +158,8 @@
 		3DE249FA24CBBF16006D9493 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				3DE249FB24CBBF22006D9493 /* Authentication.swift */,
+				3DE249FB24CBBF22006D9493 /* AuthManager.swift */,
+				3DE249FF24CBE239006D9493 /* DatabaseManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -286,12 +292,14 @@
 				3DDE0ACF24C7DB31008FB508 /* MessageVC.swift in Sources */,
 				3D72E38B24C92F7C006A00B8 /* SeparatorView.swift in Sources */,
 				3DE249FE24CBCA4E006D9493 /* ErrorMessage.swift in Sources */,
-				3DE249FC24CBBF22006D9493 /* Authentication.swift in Sources */,
+				3DE249FC24CBBF22006D9493 /* AuthManager.swift in Sources */,
+				3DE24A0224CBE44E006D9493 /* User.swift in Sources */,
 				3DDE0ACB24C7DB31008FB508 /* AppDelegate.swift in Sources */,
 				3DDE0AE524C7E775008FB508 /* LoginRegisterVC.swift in Sources */,
 				3DDE0ACD24C7DB31008FB508 /* SceneDelegate.swift in Sources */,
 				3D45548224CA9285005EEF43 /* LoginRegisterSegmentedControl.swift in Sources */,
 				3D4183F524C7F73500B39E92 /* InputTextField.swift in Sources */,
+				3DE24A0024CBE239006D9493 /* DatabaseManager.swift in Sources */,
 				3DDE0AE824C7EE26008FB508 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

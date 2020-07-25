@@ -184,17 +184,35 @@ class LoginRegisterVC: UIViewController {
     
     @objc func handleLoginRegister() {
         if loginRegisterSementedControl.selectedSegmentIndex == 0 {
-            guard let email = emailTextField.text, let password = passwordTextField.text else { return }
-            Authentication.shared.signIn(withEmail: email, andPassword: password) { (result) in
-                switch result {
-                    case .success(_):
-                        self.dismiss(animated: true, completion: nil)
-                    case .failure(let error):
-                        print(error.rawValue)
-                }
-            }
+            login()
         } else {
-            
+            register()
+        }
+    }
+    
+    // MARK: - Helper functions
+    func login() {
+        guard let email = emailTextField.text, !email.isEmpty, let password = passwordTextField.text, !password.isEmpty else { return }
+        Authentication.shared.signIn(withEmail: email, andPassword: password) { (result) in
+            switch result {
+                case .success(_):
+                    self.dismiss(animated: true, completion: nil)
+                case .failure(let error):
+                    print(error.rawValue)
+            }
+        }
+    }
+    
+    func register() {
+        guard let image = profileImageView.image, let name = nameTextField.text, let email = emailTextField.text, let password = passwordTextField.text,
+        !name.isEmpty, !email.isEmpty, !password.isEmpty else { return }
+        Authentication.shared.register(withName: name, email: email, password: password, andImage: image) { (result) in
+            switch result {
+                case .success(_):
+                    self.dismiss(animated: true, completion: nil)
+                case .failure(let error):
+                    print(error.rawValue)
+            }
         }
     }
 }

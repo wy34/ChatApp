@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import FirebaseAuth
+import Firebase
 
 class MessageVC: UIViewController {
     // MARK: - Variables/Constants
@@ -34,6 +34,20 @@ class MessageVC: UIViewController {
             let loginRegisterVc = LoginRegisterVC()
             loginRegisterVc.modalPresentationStyle = .fullScreen
             present(loginRegisterVc, animated: true)
+        } else {
+            getCurrentUser()
+        }
+    }
+    
+    // MARK: - Fetching methods
+    func getCurrentUser() {
+        DatabaseManager.shared.getCurrentUser { (result) in
+            switch result {
+                case .success(let user):
+                    self.navigationItem.title = user.name
+                case .failure(_):
+                    print("Error in getting current user")
+            }
         }
     }
     
@@ -51,7 +65,14 @@ class MessageVC: UIViewController {
     
     // MARK: - Selector methods
     @objc func logoutPressed() {
-        print("slfjals")
+        do {
+            try Auth.auth().signOut()
+            let loginRegisterVC = LoginRegisterVC()
+            loginRegisterVC.modalPresentationStyle = .fullScreen
+            present(loginRegisterVC, animated: true)
+        } catch {
+            print("\(error) - Error signing out user")
+        }
     }
     
     @objc func newMessagePressed() {

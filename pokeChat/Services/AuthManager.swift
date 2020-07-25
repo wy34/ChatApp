@@ -26,7 +26,15 @@ class Authentication {
     func register(withName name: String, email: String, password: String, andImage image: UIImage, completion: @escaping (Result<Bool, ErrorMessage>) -> Void) {
         let imageName = UUID().uuidString
         let storageRef = Storage.storage().reference().child("profileImages/\(imageName)")
-        guard let data = image.jpegData(compressionQuality: 0.2) else { return }
+        var selectedImage: UIImage?
+        
+        if image == UIImage(systemName: "plus.square") {
+            selectedImage = UIImage(systemName: "person.circle.fill")
+        } else {
+            selectedImage = image
+        }
+        
+        guard let data = selectedImage!.jpegData(compressionQuality: 0.2) else { return }
         
         storageRef.putData(data, metadata: nil) { (metadata, error) in
             if let _ = error {
