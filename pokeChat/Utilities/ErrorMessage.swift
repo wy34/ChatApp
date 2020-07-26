@@ -14,4 +14,7 @@ enum ErrorMessage: String, Error {
     case DownloadUrlError = "Cannot download url for image"
     case RegisteringUserError = "Cannot register user"
     case UpdatingDatabaseError = "Cannot put user info into database"
+    case DownloadingImageError = "Cannot download image"
+    case HTTPResponseErrorImage = "Cannot download image because of an http error"
+    case ImageDataError = "Something wrong with the downloaded image data"
 }

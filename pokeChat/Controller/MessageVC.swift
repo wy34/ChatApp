@@ -24,7 +24,7 @@ class MessageVC: UIViewController {
     private let customTitleViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: 100, height: 30))
     private let customTitleView = UIView()
     private let titleViewNameLabel = UILabel()
-    private let titleViewImage = UIImageView()
+    private let titleViewImageView = UIImageView()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -64,26 +64,33 @@ class MessageVC: UIViewController {
     }
     
     func displayUserInNavBar(user: User) {
-        self.navigationItem.title = user.name
-        customTitleView.translatesAutoresizingMaskIntoConstraints = false
-        titleViewNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        customTitleView.addSubview(titleViewImage)
-        titleViewImage.image = UIImage(named: "land")
-        titleViewImage.contentMode = .scaleAspectFill
-        titleViewImage.clipsToBounds = true
-        titleViewImage.layer.cornerRadius = 17
-        titleViewImage.anchor(top: customTitleView.topAnchor, bottom: customTitleView.bottomAnchor, left: customTitleView.leftAnchor)
-        titleViewImage.setDimension(width: customTitleView.heightAnchor, wMult: 1)
+        customTitleView.addSubview(titleViewImageView)
+        downloadTitleViewImage(imageUrl: user.imageUrl!)
+        titleViewImageView.contentMode = .scaleAspectFill
+        titleViewImageView.clipsToBounds = true
+        titleViewImageView.layer.cornerRadius = 17
+        titleViewImageView.anchor(top: customTitleView.topAnchor, bottom: customTitleView.bottomAnchor, left: customTitleView.leftAnchor)
+        titleViewImageView.setDimension(width: customTitleView.heightAnchor, wMult: 1)
         
         customTitleView.addSubview(titleViewNameLabel)
-        titleViewNameLabel.anchor(top: customTitleView.topAnchor, right: customTitleView.rightAnchor, bottom: customTitleView.bottomAnchor, left: titleViewImage.rightAnchor, paddingLeft: 10)
+        titleViewNameLabel.anchor(top: customTitleView.topAnchor, right: customTitleView.rightAnchor, bottom: customTitleView.bottomAnchor, left: titleViewImageView.rightAnchor, paddingLeft: 10)
         titleViewNameLabel.text = user.name
         
         customTitleViewContainer.addSubview(customTitleView)
         customTitleView.center(to: customTitleViewContainer, by: .centerX, withMultiplierOf: 1)
         customTitleView.setDimension(height: customTitleViewContainer.heightAnchor, hMult: 0.8)
         self.navigationItem.titleView = customTitleViewContainer
+    }
+    
+    func downloadTitleViewImage(imageUrl: String) {
+        NetworkManager.shared.downloadImage(forUrl: imageUrl) { (result) in
+            switch result {
+            case .success(let image):
+                self.titleViewImageView.image = image
+            case .failure(let error):
+                print(error.rawValue)
+            }
+        }
     }
     
     // MARK: - Layout methods
@@ -99,7 +106,7 @@ class MessageVC: UIViewController {
             let loginRegisterVC = LoginRegisterVC()
             loginRegisterVC.messageVC = self
             loginRegisterVC.modalPresentationStyle = .fullScreen
-            present(loginRegisterVC, animated: true)
+            present(loginRegisterVC, animated: true) { self.titleViewImageView.image = nil}
         } catch {
             print("\(error) - Error signing out user")
         }
