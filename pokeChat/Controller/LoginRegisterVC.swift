@@ -14,6 +14,7 @@ class LoginRegisterVC: UIViewController {
     var nameTextFieldHeightAnchor: NSLayoutConstraint?
     var emailTextFieldHeightAnchor: NSLayoutConstraint?
     var passwordTextFieldHeightAnchor: NSLayoutConstraint?
+    var messageVC: MessageVC?
     
     // MARK: - Subviews
     private let backgroundImageView = UIImageView()
@@ -197,6 +198,7 @@ class LoginRegisterVC: UIViewController {
             switch result {
                 case .success(_):
                     self.dismiss(animated: true, completion: nil)
+                    self.messageVC?.getCurrentUser()
                 case .failure(let error):
                     print(error.rawValue)
             }
@@ -210,6 +212,7 @@ class LoginRegisterVC: UIViewController {
             switch result {
                 case .success(_):
                     self.dismiss(animated: true, completion: nil)
+                    self.messageVC?.getCurrentUser()
                 case .failure(let error):
                     print(error.rawValue)
             }
