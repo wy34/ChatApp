@@ -24,4 +24,20 @@ class DatabaseManager {
             }
         }
     }
+    
+    func getAllUsers(completion: @escaping (Result<[User], ErrorMessage>) -> Void) {
+        let ref = Database.database().reference().child("users")
+        var users = [User]()
+        
+        ref.observe(.childAdded) { (snapshot) in
+            if var dictionary = snapshot.value as? [String: AnyObject] {
+                dictionary["id"] = snapshot.key as AnyObject
+                let user = User(dictionary: dictionary)
+                users.append(user)
+            }
+            DispatchQueue.main.async {
+                completion(.success(users))
+            }
+        }
+    }
 }

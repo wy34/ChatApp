@@ -113,7 +113,10 @@ class MessageVC: UIViewController {
     }
     
     @objc func newMessagePressed() {
-        print("new message")
+        let newMessageVC = NewMessageVC()
+        let nav = UINavigationController(rootViewController: newMessageVC)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
     }
 }
 
