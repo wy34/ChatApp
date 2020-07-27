@@ -11,6 +11,7 @@ import UIKit
 class NewMessageVC: UIViewController {
     // MARK: - Variables/constants
     var users = [User]()
+    var messageVC: MessageVC?
     
     // MARK: - Subviews
     private lazy var tableView: UITableView = {
@@ -74,5 +75,10 @@ extension NewMessageVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        dismiss(animated: true, completion: nil)
+        messageVC?.goToChatVC()
     }
 }

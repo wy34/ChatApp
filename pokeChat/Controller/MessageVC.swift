@@ -14,9 +14,11 @@ class MessageVC: UIViewController {
     
     
     // MARK: - Subviews: main
-    private let tableView: UITableView = {
+    private lazy var tableView: UITableView = {
         let tv = UITableView()
-        tv.register(UITableViewCell.self, forCellReuseIdentifier: "CellId")
+        tv.register(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
+        tv.delegate = self
+        tv.dataSource = self
         return tv
     }()
     
@@ -114,9 +116,32 @@ class MessageVC: UIViewController {
     
     @objc func newMessagePressed() {
         let newMessageVC = NewMessageVC()
+        newMessageVC.messageVC = self
         let nav = UINavigationController(rootViewController: newMessageVC)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
     }
 }
 
+// MARK: - UITableView
+extension MessageVC: UITableViewDelegate, UITableViewDataSource {
+    func goToChatVC() {
+        let chatVC = ChatVC()
+        navigationController?.pushViewController(chatVC, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
+        cell.backgroundColor = .blue
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        goToChatVC()
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
