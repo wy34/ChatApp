@@ -14,6 +14,7 @@ class InputContainerView: UIView {
         let view = UIView()
         view.layer.cornerRadius = 21
         view.layer.borderWidth = 1
+        view.layer.borderColor = UIColor.lightGray.cgColor
         return view
     }()
     
@@ -29,6 +30,13 @@ class InputContainerView: UIView {
         let tf = UITextField()
         tf.placeholder = "Enter a message..."
         return tf
+    }()
+    
+    private let photoPickerButton: UIButton = {
+        let button = UIButton(type: .system)
+        let largeFont = UIImage.SymbolConfiguration(font: UIFont.systemFont(ofSize: 20))
+        button.setImage(UIImage(systemName: "photo", withConfiguration: largeFont), for: .normal)
+        return button
     }()
     
     private let inputContainerBorder = SeparatorView(backgroundColor: .lightGray)
@@ -58,6 +66,10 @@ class InputContainerView: UIView {
         textFieldButtonContainer.addSubview(inputTextField)
         inputTextField.anchor(right: sendButton.leftAnchor, left: textFieldButtonContainer.leftAnchor, paddingRight: 15, paddingLeft: 15)
         inputTextField.center(y: textFieldButtonContainer.centerYAnchor)
+        
+        addSubview(photoPickerButton)
+        photoPickerButton.anchor(right: textFieldButtonContainer.leftAnchor, left: leftAnchor, paddingRight: 10, paddingLeft: 10)
+        photoPickerButton.center(y: textFieldButtonContainer.centerYAnchor)
         
         addSubview(inputContainerBorder)
         inputContainerBorder.anchor(top: topAnchor, right: rightAnchor, left: leftAnchor)
