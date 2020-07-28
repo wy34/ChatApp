@@ -8,7 +8,14 @@
 
 import UIKit
 
+protocol InputContainerViewDelegate {
+    func send(message: String, inputField: UITextField)
+}
+
 class InputContainerView: UIView {
+    // MARK: - Properties
+    var delegate: InputContainerViewDelegate?
+    
     // MARK: - Subviews
     private let textFieldButtonContainer: UIView = {
         let view = UIView()
@@ -23,12 +30,14 @@ class InputContainerView: UIView {
         button.setImage(UIImage(systemName: "arrow.up")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
         button.backgroundColor = #colorLiteral(red: 0.03921568627, green: 0.5176470588, blue: 1, alpha: 1)
         button.layer.cornerRadius = 17
+        button.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         return button
     }()
     
-    private let inputTextField: UITextField = {
+    private lazy var inputTextField: UITextField = {
         let tf = UITextField()
         tf.placeholder = "Enter a message..."
+        tf.delegate = self
         return tf
     }()
     
@@ -74,5 +83,20 @@ class InputContainerView: UIView {
         addSubview(inputContainerBorder)
         inputContainerBorder.anchor(top: topAnchor, right: rightAnchor, left: leftAnchor)
         inputContainerBorder.setDimension(hConst: 0.5)
+    }
+    
+    // MARK: - Selectors
+    @objc func handleSend() {
+        if let message = inputTextField.text, !message.isEmpty {
+            delegate?.send(message: message, inputField: inputTextField)
+        }
+    }
+}
+
+// MARK: - UITextfieldDelegate
+extension InputContainerView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        handleSend()
+        return true
     }
 }

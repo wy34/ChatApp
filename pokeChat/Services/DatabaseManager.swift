@@ -40,4 +40,21 @@ class DatabaseManager {
             }
         }
     }
+    
+    func addMessage(of message: String, toId partnerId: String, completion: @escaping (Result<Bool, ErrorMessage>) -> Void) {
+        let ref = Database.database().reference().child("messages").child(UUID().uuidString)
+        
+        guard let fromId = Auth.auth().currentUser?.uid else { return }
+        let timeSent = Int(NSDate().timeIntervalSince1970)
+        let data = ["message": message, "fromId": fromId, "toId": partnerId, "timeSent": timeSent] as [String: AnyObject]
+        
+        ref.updateChildValues(data) { (error, ref) in
+            if let _ = error {
+                completion(.failure(.AddingMessageError))
+                return
+            }
+            
+            completion(.success(true))
+        }
+    }
 }

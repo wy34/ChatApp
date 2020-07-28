@@ -125,8 +125,9 @@ class MessageVC: UIViewController {
 
 // MARK: - UITableView
 extension MessageVC: UITableViewDelegate, UITableViewDataSource {
-    func goToChatVC() {
+    func goToChatVC(user: User) {
         let chatVC = ChatVC()
+        chatVC.chatPartner = user
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
@@ -140,8 +141,8 @@ extension MessageVC: UITableViewDelegate, UITableViewDataSource {
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        goToChatVC()
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        goToChatVC()
+//        tableView.deselectRow(at: indexPath, animated: true)
+//    }
 }

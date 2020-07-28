@@ -79,6 +79,6 @@ extension NewMessageVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         dismiss(animated: true, completion: nil)
-        messageVC?.goToChatVC()
+        messageVC?.goToChatVC(user: users[indexPath.row])
     }
 }

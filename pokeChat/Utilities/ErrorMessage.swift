@@ -17,4 +17,5 @@ enum ErrorMessage: String, Error {
     case DownloadingImageError = "Cannot download image"
     case HTTPResponseErrorImage = "Cannot download image because of an http error"
     case ImageDataError = "Something wrong with the downloaded image data"
+    case AddingMessageError = "Cannot add message into firebase"
 }
