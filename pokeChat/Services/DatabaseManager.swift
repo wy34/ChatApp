@@ -54,7 +54,7 @@ class DatabaseManager {
     }
     
     func addMessage(of message: String, toId partnerId: String, completion: @escaping (Result<Bool, ErrorMessage>) -> Void) {
-        let ref = Database.database().reference().child("messages").child(UUID().uuidString)
+        let ref = Database.database().reference().child("messages").childByAutoId()
         
         guard let fromId = Auth.auth().currentUser?.uid else { return }
         let timeSent = Int(Date().timeIntervalSince1970)
@@ -72,15 +72,20 @@ class DatabaseManager {
     
     func getAllMessages(completion: @escaping (Result<[Message], ErrorMessage>) -> Void) {
         let ref = Database.database().reference().child("messages")
-        var messages = [Message]()
+        var messagesArray = [Message]()
+        var messagesDictionary = [String: Message]()
         
         ref.observe(.childAdded) { (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject] {
                 let message = Message(dictionary: dictionary)
-                messages.append(message)
+                messagesDictionary[message.toId!] = message
+                messagesArray = Array(messagesDictionary.values)
+                messagesArray.sort { (message1, message2) -> Bool in
+                    return message1.timeSent! > message2.timeSent!
+                }
             }
             DispatchQueue.main.async {
-                completion(.success(messages))
+                completion(.success(messagesArray))
             }
         }
     }
