@@ -25,6 +25,18 @@ class DatabaseManager {
         }
     }
     
+    func getUserWith(id: String, completion: @escaping (Result<User, ErrorMessage>) -> Void) {
+        let ref = Database.database().reference().child("users").child(id)
+        
+        ref.observeSingleEvent(of: .value) { (snapshot) in
+            if var dictionary = snapshot.value as? [String: AnyObject] {
+                dictionary["id"] = snapshot.key as AnyObject
+                let user = User(dictionary: dictionary)
+                completion(.success(user))
+            }
+        }
+    }
+    
     func getAllUsers(completion: @escaping (Result<[User], ErrorMessage>) -> Void) {
         let ref = Database.database().reference().child("users")
         var users = [User]()

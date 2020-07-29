@@ -16,7 +16,7 @@ class MessageVC: UIViewController {
     // MARK: - Subviews: main
     private lazy var tableView: UITableView = {
         let tv = UITableView()
-        tv.register(UITableViewCell.self, forCellReuseIdentifier: "messageCell")
+        tv.register(UserCell.self, forCellReuseIdentifier: UserCell.reuseId)
         tv.delegate = self
         tv.dataSource = self
         return tv
@@ -149,9 +149,13 @@ extension MessageVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
-        cell.textLabel?.text = messages[indexPath.row].message
+        let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.reuseId, for: indexPath) as! UserCell
+        cell.message = messages[indexPath.item]
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 75
     }
     
 //    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

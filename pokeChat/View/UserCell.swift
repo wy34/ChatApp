@@ -11,12 +11,14 @@ import UIKit
 class UserCell: UITableViewCell {
     // MARK: - Variables/constants
     static let reuseId = "userCell"
+    let dateFormatter = DateFormatter()
     
     var user: User? {
         didSet {
             guard let user = user else { return }
             textLabel?.text = user.name
             detailTextLabel?.text = user.email
+            timeLabel.isHidden = true
             
             NetworkManager.shared.downloadImage(forUrl: user.imageUrl!) { (result) in
                 switch result {
@@ -29,14 +31,48 @@ class UserCell: UITableViewCell {
         }
     }
     
+    var message: Message? {
+        didSet {
+            guard let message = message else { return }
+            guard let toId = message.toId else { return }
+            
+            DatabaseManager.shared.getUserWith(id: toId) { (result) in
+                switch result {
+                case .success(let user):
+                    self.textLabel?.text = user.name
+                    self.detailTextLabel?.text = message.message
+                    self.timeLabel.text = self.getDateAndTimeStringFrom(seconds: message.timeSent!)
+                    
+                    if let imageUrl = user.imageUrl {
+                        NetworkManager.shared.downloadImage(forUrl: imageUrl) { (result) in
+                            switch result {
+                            case .success(let image):
+                                self.userImageView.image = image
+                            case .failure(_):
+                                print("Error in downloading image for user in MessageVC")
+                            }
+                        }
+                    }
+                case .failure(_):
+                    print("Error in getting back a user with toId")
+                }
+            }
+        }
+    }
+    
     // MARK: - Subviews
     private let userImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "hippo")
         iv.layer.cornerRadius = 28
         iv.layer.borderWidth = 1
         iv.clipsToBounds = true
         return iv
+    }()
+    
+    private let timeLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 10)
+        return label
     }()
     
     // MARK: - Initializers
@@ -61,5 +97,17 @@ class UserCell: UITableViewCell {
         userImageView.anchor(left: leftAnchor, paddingLeft: 10)
         userImageView.center(y: centerYAnchor)
         userImageView.setDimension(width: heightAnchor, height: heightAnchor, wMult: 0.75, hMult: 0.75)
+        
+        addSubview(timeLabel)
+        timeLabel.anchor(top: topAnchor, right: rightAnchor, paddingTop: 10, paddingRight: 10)
+    
+    }
+    
+    // MARK: - Helper functions
+    func getDateAndTimeStringFrom(seconds: Int) -> String {
+        let date = Date(timeIntervalSince1970: Double(seconds))
+        dateFormatter.dateFormat = "MM/dd/yyyy, h:mm:ss a"
+        let dateString = dateFormatter.string(from: date)
+        return dateString
     }
 }
