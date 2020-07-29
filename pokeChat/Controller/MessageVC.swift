@@ -11,7 +11,7 @@ import Firebase
 
 class MessageVC: UIViewController {
     // MARK: - Variables/Constants
-    
+    var messages = [Message]()
     
     // MARK: - Subviews: main
     private lazy var tableView: UITableView = {
@@ -34,6 +34,7 @@ class MessageVC: UIViewController {
         setupNavBarButtons()
         layoutViews()
         checkIfUserIsLoggedIn()
+        getAllMessages()
     }
     
     // MARK: - Login methods
@@ -55,6 +56,18 @@ class MessageVC: UIViewController {
                     self.displayUserInNavBar(user: user)
                 case .failure(_):
                     print("Error in getting current user")
+            }
+        }
+    }
+    
+    func getAllMessages() {
+        DatabaseManager.shared.getAllMessages { (result) in
+            switch result {
+            case .success(let messages):
+                self.messages = messages
+                self.tableView.reloadData()
+            case .failure(_):
+                print("Error in getting all messages back")
             }
         }
     }
@@ -126,18 +139,18 @@ class MessageVC: UIViewController {
 // MARK: - UITableView
 extension MessageVC: UITableViewDelegate, UITableViewDataSource {
     func goToChatVC(user: User) {
-        let chatVC = ChatVC()
+        let chatVC = ChatVC(collectionViewLayout: UICollectionViewFlowLayout())
         chatVC.chatPartner = user
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return self.messages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "messageCell", for: indexPath)
-        cell.backgroundColor = .blue
+        cell.textLabel?.text = messages[indexPath.row].message
         return cell
     }
     

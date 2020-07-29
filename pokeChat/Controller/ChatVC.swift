@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ChatVC: UIViewController {
+class ChatVC: UICollectionViewController {
     // MARK: - Variables/Constants
     var chatPartner: User?
     
@@ -20,18 +20,6 @@ class ChatVC: UIViewController {
         return view
     }()
     
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "chatCell")
-        cv.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: inputFieldContainer.frame.height, right: 0)
-        cv.scrollIndicatorInsets = UIEdgeInsets(top: 5, left: 0, bottom: inputFieldContainer.frame.height + 5, right: 0)
-        cv.keyboardDismissMode = .interactive
-        cv.delegate = self
-        cv.dataSource = self
-        return cv
-    }()
-
     // MARK: - Input Accessory
     override var inputAccessoryView: UIView? {
         get {
@@ -42,12 +30,12 @@ class ChatVC: UIViewController {
     override var canBecomeFirstResponder: Bool {
         return true
     }
-
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavbarWithPartnerName()
-        layoutViews()
+        setupCollectionView()
     }
     
     // MARK: - Navbar config
@@ -56,27 +44,30 @@ class ChatVC: UIViewController {
         self.navigationItem.title = partner.name
     }
     
-    // MARK: - View layout
-    func layoutViews() {
-        view.addSubview(collectionView)
-        collectionView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: view.bottomAnchor, left: view.leftAnchor)
+    // MARK: - CollectionView configuration
+    func setupCollectionView() {
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "chatCell")
+        collectionView.backgroundColor = .white
+        collectionView.keyboardDismissMode = .interactive
+        collectionView.delegate = self
+        collectionView.dataSource = self
     }
 }
 
 // MARK: - UICollectionViewDelegate/DataSource/FlowLayoutDelegate
-extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 15
+extension ChatVC: UICollectionViewDelegateFlowLayout { // }{: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 20
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "chatCell", for: indexPath)
         cell.backgroundColor = .green
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 70)
+        return CGSize(width: view.frame.width, height: 80)
     }
 }
 

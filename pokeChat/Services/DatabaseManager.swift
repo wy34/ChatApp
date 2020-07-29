@@ -45,7 +45,7 @@ class DatabaseManager {
         let ref = Database.database().reference().child("messages").child(UUID().uuidString)
         
         guard let fromId = Auth.auth().currentUser?.uid else { return }
-        let timeSent = Int(NSDate().timeIntervalSince1970)
+        let timeSent = Int(Date().timeIntervalSince1970)
         let data = ["message": message, "fromId": fromId, "toId": partnerId, "timeSent": timeSent] as [String: AnyObject]
         
         ref.updateChildValues(data) { (error, ref) in
@@ -55,6 +55,21 @@ class DatabaseManager {
             }
             
             completion(.success(true))
+        }
+    }
+    
+    func getAllMessages(completion: @escaping (Result<[Message], ErrorMessage>) -> Void) {
+        let ref = Database.database().reference().child("messages")
+        var messages = [Message]()
+        
+        ref.observe(.childAdded) { (snapshot) in
+            if let dictionary = snapshot.value as? [String: AnyObject] {
+                let message = Message(dictionary: dictionary)
+                messages.append(message)
+            }
+            DispatchQueue.main.async {
+                completion(.success(messages))
+            }
         }
     }
 }

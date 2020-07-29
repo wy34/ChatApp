@@ -24,6 +24,7 @@
 		3DDE0AE324C7DD5F008FB508 /* Ext - UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE224C7DD5F008FB508 /* Ext - UIView.swift */; };
 		3DDE0AE524C7E775008FB508 /* LoginRegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */; };
 		3DDE0AE824C7EE26008FB508 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDE0AE724C7EE26008FB508 /* Constants.swift */; };
+		3DDF883524D112F200183EEC /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DDF883424D112F200183EEC /* Message.swift */; };
 		3DE249F924CBBC03006D9493 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3DE249F824CBBC03006D9493 /* GoogleService-Info.plist */; };
 		3DE249FC24CBBF22006D9493 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FB24CBBF22006D9493 /* AuthManager.swift */; };
 		3DE249FE24CBCA4E006D9493 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FD24CBCA4E006D9493 /* ErrorMessage.swift */; };
@@ -52,6 +53,7 @@
 		3DDE0AE224C7DD5F008FB508 /* Ext - UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ext - UIView.swift"; sourceTree = "<group>"; };
 		3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterVC.swift; sourceTree = "<group>"; };
 		3DDE0AE724C7EE26008FB508 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		3DDF883424D112F200183EEC /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		3DE249F824CBBC03006D9493 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3DE249FB24CBBF22006D9493 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		3DE249FD24CBCA4E006D9493 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				3DE24A0124CBE44E006D9493 /* User.swift */,
+				3DDF883424D112F200183EEC /* Message.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 				3D4183F524C7F73500B39E92 /* InputTextField.swift in Sources */,
 				3D86B8E424CD04F900E16198 /* NetworkManager.swift in Sources */,
 				3DE24A0024CBE239006D9493 /* DatabaseManager.swift in Sources */,
+				3DDF883524D112F200183EEC /* Message.swift in Sources */,
 				3DDE0AE824C7EE26008FB508 /* Constants.swift in Sources */,
 				3DDA929C24CE8CA700D7F434 /* InputContainerView.swift in Sources */,
 			);
