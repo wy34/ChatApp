@@ -158,8 +158,16 @@ extension MessageVC: UITableViewDelegate, UITableViewDataSource {
         return 75
     }
     
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        goToChatVC()
-//        tableView.deselectRow(at: indexPath, animated: true)
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let chatPartnerId = messages[indexPath.row].chatPartnerId else { return }
+        DatabaseManager.shared.getUserWith(id: chatPartnerId) { (result) in
+            switch result {
+            case .success(let user):
+                self.goToChatVC(user: user)
+                tableView.deselectRow(at: indexPath, animated: true)
+            case .failure(_):
+                print("Error in getting partner user to pass into ChatVc")
+            }
+        }
+    }
 }

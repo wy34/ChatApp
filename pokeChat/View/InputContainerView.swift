@@ -19,7 +19,7 @@ class InputContainerView: UIView {
     // MARK: - Subviews
     private let textFieldButtonContainer: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 21
+        view.layer.cornerRadius = 19
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.lightGray.cgColor
         return view
@@ -29,7 +29,7 @@ class InputContainerView: UIView {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "arrow.up")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
         button.backgroundColor = #colorLiteral(red: 0.03921568627, green: 0.5176470588, blue: 1, alpha: 1)
-        button.layer.cornerRadius = 17
+        button.layer.cornerRadius = 14
         button.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         return button
     }()
@@ -64,7 +64,7 @@ class InputContainerView: UIView {
     func layoutViews() {
         addSubview(textFieldButtonContainer)
         textFieldButtonContainer.center(to: self, by: .centerY, withMultiplierOf: 0.8)
-        textFieldButtonContainer.setDimension(width: widthAnchor, height: heightAnchor, wMult: 0.8, hMult: 0.6)
+        textFieldButtonContainer.setDimension(width: widthAnchor, height: heightAnchor, wMult: 0.8, hMult: 0.5)
         textFieldButtonContainer.anchor(right: rightAnchor, paddingRight: 15)
         
         textFieldButtonContainer.addSubview(sendButton)

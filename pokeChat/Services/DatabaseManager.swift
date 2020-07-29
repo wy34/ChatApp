@@ -78,10 +78,13 @@ class DatabaseManager {
         ref.observe(.childAdded) { (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject] {
                 let message = Message(dictionary: dictionary)
-                messagesDictionary[message.toId!] = message
-                messagesArray = Array(messagesDictionary.values)
-                messagesArray.sort { (message1, message2) -> Bool in
-                    return message1.timeSent! > message2.timeSent!
+                
+                if Auth.auth().currentUser!.uid == message.fromId! || Auth.auth().currentUser!.uid == message.toId! {
+                    messagesDictionary[message.toId!] = message
+                    messagesArray = Array(messagesDictionary.values)
+                    messagesArray.sort { (message1, message2) -> Bool in
+                        return message1.timeSent! > message2.timeSent!
+                    }
                 }
             }
             DispatchQueue.main.async {

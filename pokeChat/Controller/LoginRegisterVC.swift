@@ -191,7 +191,7 @@ class LoginRegisterVC: UIViewController {
         }
     }
     
-    // MARK: - Helper functions
+    // MARK: - Login/Register functions
     func login() {
         guard let email = emailTextField.text, !email.isEmpty, let password = passwordTextField.text, !password.isEmpty else { return }
         Authentication.shared.signIn(withEmail: email, andPassword: password) { (result) in
@@ -199,6 +199,7 @@ class LoginRegisterVC: UIViewController {
                 case .success(_):
                     self.dismiss(animated: true, completion: nil)
                     self.messageVC?.getCurrentUser()
+                    self.messageVC?.getAllMessages()
                 case .failure(let error):
                     print(error.rawValue)
             }
@@ -213,6 +214,7 @@ class LoginRegisterVC: UIViewController {
                 case .success(_):
                     self.dismiss(animated: true, completion: nil)
                     self.messageVC?.getCurrentUser()
+                    self.messageVC?.getAllMessages()
                 case .failure(let error):
                     print(error.rawValue)
             }

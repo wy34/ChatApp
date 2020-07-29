@@ -7,12 +7,17 @@
 //
 
 import Foundation
+import Firebase
 
 class Message {
     var fromId: String?
     var toId: String?
     var message: String?
     var timeSent: Int?
+    
+    var chatPartnerId: String? {
+        return Auth.auth().currentUser?.uid == fromId ? toId! : fromId!
+    }
     
     init(fromId: String?, toId: String?, message: String?, timeSent: Int?) {
         self.fromId = fromId

@@ -33,10 +33,11 @@ class UserCell: UITableViewCell {
     
     var message: Message? {
         didSet {
+            imageView?.image = nil
             guard let message = message else { return }
-            guard let toId = message.toId else { return }
+            guard let chatPartnerId = message.chatPartnerId else { return }
             
-            DatabaseManager.shared.getUserWith(id: toId) { (result) in
+            DatabaseManager.shared.getUserWith(id: chatPartnerId) { (result) in
                 switch result {
                 case .success(let user):
                     self.textLabel?.text = user.name
@@ -96,7 +97,7 @@ class UserCell: UITableViewCell {
         addSubview(userImageView)
         userImageView.anchor(left: leftAnchor, paddingLeft: 10)
         userImageView.center(y: centerYAnchor)
-        userImageView.setDimension(width: heightAnchor, height: heightAnchor, wMult: 0.75, hMult: 0.75)
+        userImageView.setDimension(width: heightAnchor, height: heightAnchor, wMult: 0.70, hMult: 0.70)
         
         addSubview(timeLabel)
         timeLabel.anchor(top: topAnchor, right: rightAnchor, paddingTop: 10, paddingRight: 10)
