@@ -22,30 +22,50 @@ class LoginRegisterVC: UIViewController {
     private let titleLabel = UILabel()
     private let loginRegisterSementedControl = LoginRegisterSegmentedControl(items: ["Login", "Register"])
     private let inputContainerView = UIView()
-    private let loginRegisterButton = LoginButton(type: .system)
+    //private let loginRegisterButton = LoginButton(type: .system)
     private let nameTextField = InputTextField(placeholder: "Name")
     private let separator1 = SeparatorView()
     private let emailTextField = InputTextField(placeholder: "Email")
     private let separator2 = SeparatorView()
     private let passwordTextField = InputTextField(placeholder: "Password")
     
+
+    private let signpButton = CustomButton(title: "Sign up")
+    private let loginButton = CustomButton(title: "Log in", textColor: .systemGreen)
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupSubviews()
+        view.backgroundColor = .white
+        layoutViews()
+    }
+    
+    // MARK: - View Configuration
+    func layoutViews() {
+        view.addSubview(loginButton)
+        loginButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor)
+        loginButton.center(x: view.centerXAnchor)
+        loginButton.setDimension(width: view.widthAnchor, height: view.heightAnchor, wMult: 0.8, hMult: 0.05)
+        
+        view.addSubview(signpButton)
+        signpButton.anchor(bottom: loginButton.topAnchor, paddingBottom: 5)
+        signpButton.center(x: view.centerXAnchor)
+        signpButton.setDimension(width: view.widthAnchor, height: view.heightAnchor, wMult: 0.8, hMult: 0.05)
+        
+        signpButton.backgroundColor = .systemGreen
+        loginButton.backgroundColor = .white
     }
     
     // MARK: - Subview configuration methods
-    func setupSubviews() {
-        setupBackgroundImageView()
-        setupTitleLabel()
-        setupProfileImageView()
-        setupLoginRegisterSegmentedControl()
-        setupInputContainerView()
-        setupLoginRegisterButton()
-        setupInputTextFields()
-        setupInputSeparators()
-    }
+//    func setupSubviews() {
+//        setupBackgroundImageView()
+//        setupTitleLabel()
+//        setupProfileImageView()
+//        setupLoginRegisterSegmentedControl()
+//        setupInputContainerView()
+//        setupLoginRegisterButton()
+//        setupInputTextFields()
+//        setupInputSeparators()
+//    }
     
     func setupBackgroundImageView() {
         backgroundImageView.image = UIImage(named: "background")
@@ -104,14 +124,14 @@ class LoginRegisterVC: UIViewController {
         inputContainerHeightAnchor?.isActive = true
     }
     
-    func setupLoginRegisterButton() {
-        loginRegisterButton.addTarget(self, action: #selector(handleLoginRegister), for: .touchUpInside)
-        
-        view.addSubview(loginRegisterButton)
-        loginRegisterButton.anchor(top: inputContainerView.bottomAnchor, paddingTop: 15)
-        loginRegisterButton.setDimension(width: loginRegisterSementedControl.widthAnchor, height: view.heightAnchor, hMult: 0.05)
-        loginRegisterButton.center(x: view.centerXAnchor)
-    }
+//    func setupLoginRegisterButton() {
+//        loginRegisterButton.addTarget(self, action: #selector(handleLoginRegister), for: .touchUpInside)
+//
+//        view.addSubview(loginRegisterButton)
+//        loginRegisterButton.anchor(top: inputContainerView.bottomAnchor, paddingTop: 15)
+//        loginRegisterButton.setDimension(width: loginRegisterSementedControl.widthAnchor, height: view.heightAnchor, hMult: 0.05)
+//        loginRegisterButton.center(x: view.centerXAnchor)
+//    }
     
     func setupInputTextFields() {
         inputContainerView.addSubview(nameTextField)
@@ -150,7 +170,7 @@ class LoginRegisterVC: UIViewController {
         
         let selectedIndex = loginRegisterSementedControl.selectedSegmentIndex
         
-        loginRegisterButton.setTitle(loginRegisterSementedControl.titleForSegment(at: selectedIndex), for: .normal)
+        //loginRegisterButton.setTitle(loginRegisterSementedControl.titleForSegment(at: selectedIndex), for: .normal)
         
         titleLabel.alpha = selectedIndex == 0 ? 1 : 0
         
