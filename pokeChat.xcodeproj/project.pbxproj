@@ -147,7 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				3DDE0ACE24C7DB31008FB508 /* MessageVC.swift */,
-				3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */,
+				3DFC60BA24D226C300520936 /* New Group */,
 				3D86B8E524CD27FE00E16198 /* NewMessageVC.swift */,
 				3DDA929924CE58C500D7F434 /* ChatVC.swift */,
 			);
@@ -180,6 +180,14 @@
 				3D86B8E324CD04F900E16198 /* NetworkManager.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		3DFC60BA24D226C300520936 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+				3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */,
+			);
+			path = "New Group";
 			sourceTree = "<group>";
 		};
 		9E99343EA979B1B7A450AFD5 /* Frameworks */ = {
