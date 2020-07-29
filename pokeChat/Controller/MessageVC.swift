@@ -34,16 +34,19 @@ class MessageVC: UIViewController {
         super.viewDidLoad()
         setupNavBarButtons()
         layoutViews()
-        checkIfUserIsLoggedIn()
+        perform(#selector(checkIfUserIsLoggedIn), with: nil, afterDelay: 0)
         getAllMessages()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkIfUserIsLoggedIn()
+    }
+    
     // MARK: - Login methods
-    func checkIfUserIsLoggedIn() {
+    @objc func checkIfUserIsLoggedIn() {
         if Auth.auth().currentUser == nil {
-            let loginRegisterVc = LoginRegisterVC()
-            loginRegisterVc.modalPresentationStyle = .fullScreen
-            present(loginRegisterVc, animated: true)
+            logoutPressed()
         } else {
             getCurrentUser()
         }

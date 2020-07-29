@@ -74,12 +74,13 @@ class DatabaseManager {
         let ref = Database.database().reference().child("messages")
         var messagesArray = [Message]()
         var messagesDictionary = [String: Message]()
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
         
         ref.observe(.childAdded) { (snapshot) in
             if let dictionary = snapshot.value as? [String: AnyObject] {
                 let message = Message(dictionary: dictionary)
                 
-                if Auth.auth().currentUser!.uid == message.fromId! || Auth.auth().currentUser!.uid == message.toId! {
+                if currentUid == message.fromId! || currentUid == message.toId! {
                     messagesDictionary[message.toId!] = message
                     messagesArray = Array(messagesDictionary.values)
                     messagesArray.sort { (message1, message2) -> Bool in
