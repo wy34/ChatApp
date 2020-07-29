@@ -12,6 +12,7 @@ import Firebase
 class MessageVC: UIViewController {
     // MARK: - Variables/Constants
     var messages = [Message]()
+    var name = "William"
     
     // MARK: - Subviews: main
     private lazy var tableView: UITableView = {
