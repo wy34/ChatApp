@@ -67,7 +67,7 @@ class RegisterAvatarVC: UIViewController {
     }
     
     func layoutContinueButton() {
-        continueButton.addTarget(self, action: #selector(showNextPage), for: .touchUpInside)
+        continueButton.addTarget(self, action: #selector(goToNextPage), for: .touchUpInside)
         view.addSubview(continueButton)
         continueButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10)
         continueButton.center(x: view.centerXAnchor)
@@ -87,7 +87,20 @@ class RegisterAvatarVC: UIViewController {
         present(picker, animated: true)
     }
     
-    @objc func showNextPage() {
+    @objc func goToNextPage() {
+        if selectImageButton.imageView?.image == UIImage(named: "addImage") {
+            let alert = UIAlertController(title: "Profile Image", message: "You did not select an image, are you sure? You can always set it later", preferredStyle: .actionSheet)
+            let yesAction = UIAlertAction(title: "Yes", style: .default, handler: showRegisterNameVC(action:))
+            let noAction = UIAlertAction(title: "No", style: .default, handler: nil)
+            alert.addAction(yesAction)
+            alert.addAction(noAction)
+            present(alert, animated: true)
+        } else {
+            showRegisterNameVC(action: nil)
+        }
+    }
+    
+    func showRegisterNameVC(action: UIAlertAction?) {
         let registerNameVC = RegisterNameVC()
         navigationController?.pushViewController(registerNameVC, animated: true)
     }
