@@ -30,6 +30,8 @@
 		3DE249FE24CBCA4E006D9493 /* ErrorMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FD24CBCA4E006D9493 /* ErrorMessage.swift */; };
 		3DE24A0024CBE239006D9493 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE249FF24CBE239006D9493 /* DatabaseManager.swift */; };
 		3DE24A0224CBE44E006D9493 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DE24A0124CBE44E006D9493 /* User.swift */; };
+		3DFC60BC24D2271900520936 /* RegisterNameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFC60BB24D2271900520936 /* RegisterNameVC.swift */; };
+		3DFC60BE24D2287700520936 /* RegisterAvatarVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DFC60BD24D2287700520936 /* RegisterAvatarVC.swift */; };
 		5B4F8C5746049F4155232887 /* Pods_pokeChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A80853E4A8CB88AB764895AE /* Pods_pokeChat.framework */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +61,8 @@
 		3DE249FD24CBCA4E006D9493 /* ErrorMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorMessage.swift; sourceTree = "<group>"; };
 		3DE249FF24CBE239006D9493 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		3DE24A0124CBE44E006D9493 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		3DFC60BB24D2271900520936 /* RegisterNameVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterNameVC.swift; sourceTree = "<group>"; };
+		3DFC60BD24D2287700520936 /* RegisterAvatarVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterAvatarVC.swift; sourceTree = "<group>"; };
 		70CD1F90B7F9BA975903EE93 /* Pods-pokeChat.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pokeChat.debug.xcconfig"; path = "Target Support Files/Pods-pokeChat/Pods-pokeChat.debug.xcconfig"; sourceTree = "<group>"; };
 		A80853E4A8CB88AB764895AE /* Pods_pokeChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_pokeChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A934547F562C268C0BBCA98C /* Pods-pokeChat.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-pokeChat.release.xcconfig"; path = "Target Support Files/Pods-pokeChat/Pods-pokeChat.release.xcconfig"; sourceTree = "<group>"; };
@@ -186,6 +190,8 @@
 			isa = PBXGroup;
 			children = (
 				3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */,
+				3DFC60BD24D2287700520936 /* RegisterAvatarVC.swift */,
+				3DFC60BB24D2271900520936 /* RegisterNameVC.swift */,
 			);
 			path = "New Group";
 			sourceTree = "<group>";
@@ -316,6 +322,7 @@
 				3DDA929A24CE58C500D7F434 /* ChatVC.swift in Sources */,
 				3DDE0AE324C7DD5F008FB508 /* Ext - UIView.swift in Sources */,
 				3D72E38D24C930B4006A00B8 /* CustomButton.swift in Sources */,
+				3DFC60BE24D2287700520936 /* RegisterAvatarVC.swift in Sources */,
 				3DDE0ACF24C7DB31008FB508 /* MessageVC.swift in Sources */,
 				3D72E38B24C92F7C006A00B8 /* SeparatorView.swift in Sources */,
 				3D86B8E824CD2BAC00E16198 /* UserCell.swift in Sources */,
@@ -331,6 +338,7 @@
 				3D86B8E424CD04F900E16198 /* NetworkManager.swift in Sources */,
 				3DE24A0024CBE239006D9493 /* DatabaseManager.swift in Sources */,
 				3DDF883524D112F200183EEC /* Message.swift in Sources */,
+				3DFC60BC24D2271900520936 /* RegisterNameVC.swift in Sources */,
 				3DDE0AE824C7EE26008FB508 /* Constants.swift in Sources */,
 				3DDA929C24CE8CA700D7F434 /* InputContainerView.swift in Sources */,
 			);

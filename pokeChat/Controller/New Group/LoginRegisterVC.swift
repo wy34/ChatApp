@@ -67,15 +67,29 @@ class LoginRegisterVC: UIViewController {
     
     func setuptButtons() {
         view.addSubview(loginButton)
+        loginButton.addTarget(self, action: #selector(loginPressed), for: .touchUpInside)
         loginButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10)
         loginButton.center(x: view.centerXAnchor)
         loginButton.setDimension(width: view.widthAnchor, height: view.heightAnchor, wMult: 0.8, hMult: 0.05)
         
         view.addSubview(signpButton)
         signpButton.layer.cornerRadius = (view.frame.height * 0.05) / 2
+        signpButton.addTarget(self, action: #selector(signupPressed), for: .touchUpInside)
         signpButton.anchor(bottom: loginButton.topAnchor, paddingBottom: 5)
         signpButton.center(x: view.centerXAnchor)
         signpButton.setDimension(width: view.widthAnchor, height: view.heightAnchor, wMult: 0.8, hMult: 0.05)
+    }
+    
+    // MARK: - Login/Register function
+    @objc func loginPressed() {
+        
+    }
+    
+    @objc func signupPressed() {
+        let nameAvatarVC = RegisterAvatarVC()
+        let nav = UINavigationController(rootViewController: nameAvatarVC)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
     }
     
     // MARK: - Subview configuration methods
