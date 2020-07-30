@@ -13,8 +13,8 @@ class ChatVC: UICollectionViewController {
     var chatPartner: User?
     
     // MARK: - Subviews
-    private lazy var inputFieldContainer: InputContainerView = {
-        let view = InputContainerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 70))
+    private lazy var inputFieldContainer: MessageInputContainerView = {
+        let view = MessageInputContainerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 70))
         view.backgroundColor = .white
         view.delegate = self
         return view

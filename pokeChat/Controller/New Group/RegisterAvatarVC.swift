@@ -13,7 +13,7 @@ class RegisterAvatarVC: UIViewController {
     private let instructionLabel: UILabel = {
         let label = UILabel()
         var attributedText = NSMutableAttributedString(string: "Let's get started\n", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 30)])
-        attributedText.append(NSAttributedString(string: "\nSelect a profile image", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)]))
+        attributedText.append(NSAttributedString(string: "\nSelect a profile image", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]))
         label.attributedText = attributedText
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -25,7 +25,7 @@ class RegisterAvatarVC: UIViewController {
         button.setImage(#imageLiteral(resourceName: "addImage"), for: .normal)
         button.tintColor = .black
         button.addTarget(self, action: #selector(openImageLibrary), for: .touchUpInside)
-        button.layer.cornerRadius = (view.frame.width * 0.35) / 2
+        button.layer.cornerRadius = (view.frame.width * 0.45) / 2
         button.layer.borderWidth = 2
         return button
     }()
@@ -61,7 +61,7 @@ class RegisterAvatarVC: UIViewController {
     
     func layoutImagePickerButton() {
         view.addSubview(selectImageButton)
-        selectImageButton.setDimension(width: view.widthAnchor, height: view.widthAnchor, wMult: 0.35, hMult: 0.35)
+        selectImageButton.setDimension(width: view.widthAnchor, height: view.widthAnchor, wMult: 0.45, hMult: 0.45)
         selectImageButton.center(x: view.centerXAnchor)
         selectImageButton.center(to: view, by: .centerY, withMultiplierOf: 0.8)
     }
@@ -89,7 +89,7 @@ class RegisterAvatarVC: UIViewController {
     
     @objc func goToNextPage() {
         if selectImageButton.imageView?.image == UIImage(named: "addImage") {
-            let alert = UIAlertController(title: "Profile Image", message: "You did not select an image, are you sure? You can always set it later", preferredStyle: .actionSheet)
+            let alert = UIAlertController(title: "Profile Image", message: "Are you sure you want to continue without a profile image? (You can always set it later.)", preferredStyle: .actionSheet)
             let yesAction = UIAlertAction(title: "Yes", style: .default, handler: showRegisterNameVC(action:))
             let noAction = UIAlertAction(title: "No", style: .default, handler: nil)
             alert.addAction(yesAction)

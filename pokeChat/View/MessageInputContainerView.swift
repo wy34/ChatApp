@@ -12,7 +12,7 @@ protocol InputContainerViewDelegate {
     func send(message: String, inputField: UITextField)
 }
 
-class InputContainerView: UIView {
+class MessageInputContainerView: UIView {
     // MARK: - Properties
     var delegate: InputContainerViewDelegate?
     
@@ -94,7 +94,7 @@ class InputContainerView: UIView {
 }
 
 // MARK: - UITextfieldDelegate
-extension InputContainerView: UITextFieldDelegate {
+extension MessageInputContainerView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         handleSend()
         return true
