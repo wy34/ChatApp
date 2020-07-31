@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RegisterNameVC: UIViewController {
+class RegisterNameVC: ClearNavBarViewController {
     var continueButtonContainerViewBottom: NSLayoutConstraint?
     
     // MARK: - Subviews
@@ -39,21 +39,10 @@ class RegisterNameVC: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         continueButtonContainerView.delegate = self
-        configNavbar()
+        configNavbar(withButtonImageName: "arrow.left", andButtonAction: #selector(goBack))
         layoutInstructionLabel()
         layoutNameTextfield()
-    }
-    
-    // MARK: - Config Navbar
-    func configNavbar() {
-        navigationController?.navigationBar.barTintColor = .white
-        navigationController?.navigationBar.shadowImage = UIImage()
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let dismissButton = UIBarButtonItem(image: UIImage(systemName: "arrow.left"), style: .plain, target: self, action: #selector(goBack))
-        dismissButton.tintColor = .black
-        navigationItem.leftBarButtonItems = [space, dismissButton]
     }
     
     // MARK: - Layout subviews
@@ -64,7 +53,10 @@ class RegisterNameVC: UIViewController {
     }
     
     func layoutNameTextfield() {
-        nameTextField.becomeFirstResponder()
+        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { _ in
+            self.nameTextField.becomeFirstResponder()
+        }
+
         nameTextField.layer.borderWidth = 2
         
         view.addSubview(nameTextField)

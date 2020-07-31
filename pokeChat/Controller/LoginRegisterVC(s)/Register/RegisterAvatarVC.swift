@@ -8,7 +8,7 @@
 
 import UIKit
 
-class RegisterAvatarVC: UIViewController {
+class RegisterAvatarVC: ClearNavBarViewController {
     // MARK: - Subviews
     private let instructionLabel: UILabel = {
         let label = UILabel()
@@ -25,7 +25,7 @@ class RegisterAvatarVC: UIViewController {
         button.setImage(#imageLiteral(resourceName: "addImage"), for: .normal)
         button.tintColor = .black
         button.addTarget(self, action: #selector(openImageLibrary), for: .touchUpInside)
-        button.layer.cornerRadius = (view.frame.width * 0.45) / 2
+        button.layer.cornerRadius = (view.frame.width * 0.4) / 2
         button.layer.borderWidth = 2
         return button
     }()
@@ -35,21 +35,10 @@ class RegisterAvatarVC: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        configNavbar()
+        configNavbar(withButtonImageName: "xmark.circle", andButtonAction: #selector(dismissPage))
         layoutInstructionLabel()
         layoutImagePickerButton()
         layoutContinueButton()
-    }
-    
-    // MARK: - Config Navbar
-    func configNavbar() {
-        navigationController?.navigationBar.barTintColor = .white
-        navigationController?.navigationBar.shadowImage = UIImage()
-        let space = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let dismissButton = UIBarButtonItem(image: UIImage(systemName: "xmark.circle"), style: .plain, target: self, action: #selector(dismissPage))
-        dismissButton.tintColor = .black
-        navigationItem.leftBarButtonItems = [space, dismissButton]
     }
     
     // MARK: - Layout subviews
@@ -61,7 +50,7 @@ class RegisterAvatarVC: UIViewController {
     
     func layoutImagePickerButton() {
         view.addSubview(selectImageButton)
-        selectImageButton.setDimension(width: view.widthAnchor, height: view.widthAnchor, wMult: 0.45, hMult: 0.45)
+        selectImageButton.setDimension(width: view.widthAnchor, height: view.widthAnchor, wMult: 0.4, hMult: 0.4)
         selectImageButton.center(x: view.centerXAnchor)
         selectImageButton.center(to: view, by: .centerY, withMultiplierOf: 0.8)
     }

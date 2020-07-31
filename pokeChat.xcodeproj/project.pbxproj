@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3D3356E624D3B7AB0039F642 /* ClearNavBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3356E524D3B7AB0039F642 /* ClearNavBarViewController.swift */; };
 		3D4183F524C7F73500B39E92 /* LoginRegisterTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4183F424C7F73500B39E92 /* LoginRegisterTextField.swift */; };
 		3D45548224CA9285005EEF43 /* LoginRegisterSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D45548124CA9285005EEF43 /* LoginRegisterSegmentedControl.swift */; };
 		3D72E38B24C92F7C006A00B8 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3D3356E524D3B7AB0039F642 /* ClearNavBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearNavBarViewController.swift; sourceTree = "<group>"; };
 		3D4183F424C7F73500B39E92 /* LoginRegisterTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterTextField.swift; sourceTree = "<group>"; };
 		3D45548124CA9285005EEF43 /* LoginRegisterSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterSegmentedControl.swift; sourceTree = "<group>"; };
 		3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				3D86B8E724CD2BAC00E16198 /* UserCell.swift */,
 				3DDA929B24CE8CA700D7F434 /* MessageInputContainerView.swift */,
 				3DFC60BF24D26F3500520936 /* ContinueButtonContainerView.swift */,
+				3D3356E524D3B7AB0039F642 /* ClearNavBarViewController.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -156,7 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				3DDE0ACE24C7DB31008FB508 /* MessageVC.swift */,
-				3DFC60BA24D226C300520936 /* New Group */,
+				3DFC60BA24D226C300520936 /* LoginRegisterVC(s) */,
 				3D86B8E524CD27FE00E16198 /* NewMessageVC.swift */,
 				3DDA929924CE58C500D7F434 /* ChatVC.swift */,
 			);
@@ -191,15 +194,23 @@
 			path = Services;
 			sourceTree = "<group>";
 		};
-		3DFC60BA24D226C300520936 /* New Group */ = {
+		3DFC60BA24D226C300520936 /* LoginRegisterVC(s) */ = {
 			isa = PBXGroup;
 			children = (
 				3DDE0AE424C7E775008FB508 /* LoginRegisterVC.swift */,
+				3DFC60C324D27E1500520936 /* Register */,
+			);
+			path = "LoginRegisterVC(s)";
+			sourceTree = "<group>";
+		};
+		3DFC60C324D27E1500520936 /* Register */ = {
+			isa = PBXGroup;
+			children = (
 				3DFC60BD24D2287700520936 /* RegisterAvatarVC.swift */,
 				3DFC60BB24D2271900520936 /* RegisterNameVC.swift */,
 				3DFC60C124D278A700520936 /* RegisterEmailPasswordVC.swift */,
 			);
-			path = "New Group";
+			path = Register;
 			sourceTree = "<group>";
 		};
 		9E99343EA979B1B7A450AFD5 /* Frameworks */ = {
@@ -325,6 +336,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3D3356E624D3B7AB0039F642 /* ClearNavBarViewController.swift in Sources */,
 				3DDA929A24CE58C500D7F434 /* ChatVC.swift in Sources */,
 				3DDE0AE324C7DD5F008FB508 /* Ext - UIView.swift in Sources */,
 				3D72E38D24C930B4006A00B8 /* CustomButton.swift in Sources */,
