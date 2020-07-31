@@ -56,9 +56,10 @@ class RegisterAvatarVC: ClearNavBarViewController {
     }
     
     func layoutContinueButton() {
+        continueButton.layer.cornerRadius = (view.frame.height * 0.05) / 2
         continueButton.addTarget(self, action: #selector(goToNextPage), for: .touchUpInside)
         view.addSubview(continueButton)
-        continueButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10)
+        continueButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 15)
         continueButton.center(x: view.centerXAnchor)
         continueButton.setDimension(width: view.widthAnchor, height: view.heightAnchor, wMult: 0.85, hMult: 0.05)
     }
@@ -91,6 +92,7 @@ class RegisterAvatarVC: ClearNavBarViewController {
     
     func showRegisterNameVC(action: UIAlertAction?) {
         let registerNameVC = RegisterNameVC()
+        registerNameVC.userImage = selectImageButton.imageView?.image
         navigationController?.pushViewController(registerNameVC, animated: true)
     }
 }

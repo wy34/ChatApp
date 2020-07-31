@@ -19,7 +19,6 @@ class ContinueButtonContainerView: UIView {
     // MARK: - Subviews
     lazy var continueButton: CustomButton = {
         let button = CustomButton()
-        button.setTitle("Continue", for: .normal)
         button.backgroundColor = .systemGreen
         button.alpha = 0.5
         button.isEnabled = false
@@ -38,10 +37,17 @@ class ContinueButtonContainerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    init(title: String, frame: CGRect) {
+        super.init(frame: .zero)
+        configureContinueButtonContainerView()
+        self.frame = frame
+        continueButton.setTitle(title, for: .normal)
+    }
+    
     // MARK: - Layout subviews
     func configureContinueButtonContainerView() {
         addSubview(continueButton)
-        continueButton.setDimension(width: widthAnchor, height: heightAnchor, wMult: 0.85, hMult: 0.75)
+        continueButton.setDimension(width: widthAnchor, height: heightAnchor, wMult: 0.8, hMult: 0.75)
         continueButton.center(x: centerXAnchor, y: centerYAnchor)
     }
     

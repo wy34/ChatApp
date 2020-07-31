@@ -68,7 +68,7 @@ class LoginRegisterVC: UIViewController {
     func setuptButtons() {
         view.addSubview(loginButton)
         loginButton.addTarget(self, action: #selector(loginPressed), for: .touchUpInside)
-        loginButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 10)
+        loginButton.anchor(bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingBottom: 15)
         loginButton.center(x: view.centerXAnchor)
         loginButton.setDimension(width: view.widthAnchor, height: view.heightAnchor, wMult: 0.8, hMult: 0.05)
         

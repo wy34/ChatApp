@@ -9,10 +9,12 @@
 import UIKit
 
 class RegisterNameVC: ClearNavBarViewController {
+    // MARK: - Properties
+    var userImage: UIImage?
     var continueButtonContainerViewBottom: NSLayoutConstraint?
     
     // MARK: - Subviews
-    private let instructionLabel: UILabel = {
+    let instructionLabel: UILabel = {
         let label = UILabel()
         var attributedText = NSMutableAttributedString(string: "What is your name?", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 30)])
         label.attributedText = attributedText
@@ -21,9 +23,9 @@ class RegisterNameVC: ClearNavBarViewController {
         return label
     }()
     
-    private lazy var continueButtonContainerView = ContinueButtonContainerView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 55))
+    private lazy var continueButtonContainerView = ContinueButtonContainerView(title: "Continue", frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 55))
     
-    private let nameTextField = LoginRegisterTextField(placeholder: "Name", foregroundColor: .black)
+    let nameTextField = LoginRegisterTextField(placeholder: "Name", foregroundColor: .black)
     
     // MARK: - InputAccessory view
     override var inputAccessoryView: UIView? {
@@ -53,10 +55,7 @@ class RegisterNameVC: ClearNavBarViewController {
     }
     
     func layoutNameTextfield() {
-        Timer.scheduledTimer(withTimeInterval: 0.6, repeats: false) { _ in
-            self.nameTextField.becomeFirstResponder()
-        }
-
+        nameTextField.becomeFirstResponder()
         nameTextField.layer.borderWidth = 2
         
         view.addSubview(nameTextField)
@@ -89,6 +88,8 @@ class RegisterNameVC: ClearNavBarViewController {
 extension RegisterNameVC: ContinueButtonContainerViewDelegate {
     func goToNextPage() {
         let registerEmailPasswordVC = RegisterEmailPasswordVC()
+        guard let userImage = self.userImage, let name = nameTextField.text else { return }
+        registerEmailPasswordVC.userInfo = ["userImage": userImage, "name": name] as [String: AnyObject]
         navigationController?.pushViewController(registerEmailPasswordVC, animated: true)
     }
 }

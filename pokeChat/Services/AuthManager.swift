@@ -9,8 +9,8 @@
 import Foundation
 import Firebase
 
-class Authentication {
-    static let shared = Authentication()
+class AuthManager {
+    static let shared = AuthManager()
     
     func signIn(withEmail email: String, andPassword password: String, completion: @escaping (Result<Bool, ErrorMessage>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
