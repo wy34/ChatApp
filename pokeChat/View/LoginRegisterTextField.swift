@@ -17,6 +17,7 @@ class LoginRegisterTextField: UITextField {
         backgroundColor = bgColor
         textAlignment = .center
         layer.cornerRadius = 10
+        autocorrectionType = .no
     }
     
     required init?(coder: NSCoder) {

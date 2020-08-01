@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class LoginRegisterVC: UIViewController {
     // MARK: - Variables/constants
@@ -42,6 +43,14 @@ class LoginRegisterVC: UIViewController {
         setupLogo()
         setupTitleLabel()
         setuptButtons()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if Auth.auth().currentUser != nil {
+            dismiss(animated: true, completion: nil)
+        }
     }
     
     // MARK: - View Configuration

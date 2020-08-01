@@ -108,7 +108,7 @@ extension RegisterEmailPasswordVC: ContinueButtonContainerViewDelegate {
 
         AuthManager.shared.register(withName: name, email: email, password: password, andImage: image) { (result) in
             print("susscessfully signed up")
-            self.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true)
         }
     }
 }
