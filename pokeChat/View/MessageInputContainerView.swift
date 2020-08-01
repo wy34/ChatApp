@@ -28,7 +28,7 @@ class MessageInputContainerView: UIView {
     private let sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "arrow.up")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
-        button.backgroundColor = #colorLiteral(red: 0.03921568627, green: 0.5176470588, blue: 1, alpha: 1)
+        button.backgroundColor = .systemGreen
         button.layer.cornerRadius = 14
         button.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         return button
@@ -45,6 +45,7 @@ class MessageInputContainerView: UIView {
         let button = UIButton(type: .system)
         let largeFont = UIImage.SymbolConfiguration(font: UIFont.systemFont(ofSize: 20))
         button.setImage(UIImage(systemName: "photo", withConfiguration: largeFont), for: .normal)
+        button.tintColor = .systemGreen
         return button
     }()
     

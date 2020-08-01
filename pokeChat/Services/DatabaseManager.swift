@@ -81,7 +81,7 @@ class DatabaseManager {
                 let message = Message(dictionary: dictionary)
                 
                 if currentUid == message.fromId! || currentUid == message.toId! {
-                    messagesDictionary[message.toId!] = message
+                    messagesDictionary[message.chatPartnerId!] = message
                     messagesArray = Array(messagesDictionary.values)
                     messagesArray.sort { (message1, message2) -> Bool in
                         return message1.timeSent! > message2.timeSent!
