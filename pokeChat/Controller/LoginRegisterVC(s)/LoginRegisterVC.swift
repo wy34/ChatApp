@@ -10,27 +10,10 @@ import UIKit
 import Firebase
 
 class LoginRegisterVC: UIViewController {
-    // MARK: - Variables/constants
-    var inputContainerHeightAnchor: NSLayoutConstraint?
-    var nameTextFieldHeightAnchor: NSLayoutConstraint?
-    var emailTextFieldHeightAnchor: NSLayoutConstraint?
-    var passwordTextFieldHeightAnchor: NSLayoutConstraint?
-    var messageVC: MessageVC?
+      // MARK: - Properties
+      var messageVC: MessageVC?
     
     // MARK: - Subviews
-//    private let backgroundImageView = UIImageView()
-//    private let profileImageView = UIImageView()
-//    private let titleLabel = UILabel()
-//    private let loginRegisterSementedControl = LoginRegisterSegmentedControl(items: ["Login", "Register"])
-//    private let inputContainerView = UIView()
-//    private let loginRegisterButton = LoginButton(type: .system)
-//    private let nameTextField = InputTextField(placeholder: "Name")
-//    private let separator1 = SeparatorView()
-//    private let emailTextField = InputTextField(placeholder: "Email")
-//    private let separator2 = SeparatorView()
-//    private let passwordTextField = InputTextField(placeholder: "Password")
-    
-
     private let appLogoImageView = UIImageView(image: UIImage(named: "pokeball"))
     private let titleLabel = UILabel()
     private let signpButton = CustomButton(title: "Sign up", bgColor: .systemGreen)
@@ -50,6 +33,8 @@ class LoginRegisterVC: UIViewController {
         
         if Auth.auth().currentUser != nil {
             dismiss(animated: true, completion: nil)
+            self.messageVC?.getCurrentUser()
+            self.messageVC?.getAllMessages()
         }
     }
     
@@ -91,7 +76,10 @@ class LoginRegisterVC: UIViewController {
     
     // MARK: - Login/Register function
     @objc func loginPressed() {
-        
+        let loginVC = LoginVC()
+        let nav = UINavigationController(rootViewController: loginVC)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
     }
     
     @objc func signupPressed() {

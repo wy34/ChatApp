@@ -1,23 +1,18 @@
 //
-//  RegisterEmailPasswordVC.swift
+//  LoginVC.swift
 //  pokeChat
 //
-//  Created by William Yeung on 7/29/20.
+//  Created by William Yeung on 7/31/20.
 //  Copyright © 2020 William Yeung. All rights reserved.
 //
 
 import UIKit
-import Firebase
 
-class RegisterEmailPasswordVC: ClearNavBarViewController{
-    // MARK: - Properties
-    var userInfo: [String: AnyObject]?
-    
+class LoginVC: ClearNavBarViewController{
     // MARK: - Subviews
     let instructionLabel: UILabel = {
         let label = UILabel()
-        var attributedText = NSMutableAttributedString(string: "And finally...\n", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 30)])
-        attributedText.append(NSAttributedString(string: "\nEnter an email and password", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]))
+        var attributedText = NSMutableAttributedString(string: "Enter your email and password", attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 30)])
         label.attributedText = attributedText
         label.numberOfLines = 0
         label.textAlignment = .center
@@ -32,7 +27,7 @@ class RegisterEmailPasswordVC: ClearNavBarViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         continueButtonContainerView.delegate = self
-        configNavbar(withButtonImageName: "arrow.left", andButtonAction: #selector(goBack))
+        configNavbar(withButtonImageName: "xmark.circle", andButtonAction: #selector(goBack))
         layoutInstructionLabel()
         layoutEmailTextfield()
         layoutPasswordTextField()
@@ -84,7 +79,7 @@ class RegisterEmailPasswordVC: ClearNavBarViewController{
     
     // MARK: - Selectors
     @objc func goBack() {
-        navigationController?.popViewController(animated: true)
+        dismiss(animated: true, completion: nil)
     }
     
     @objc func handleEnteringText() {
@@ -99,28 +94,24 @@ class RegisterEmailPasswordVC: ClearNavBarViewController{
 }
 
 // MARK: - ContinueButtonContainerViewDelegate
-extension RegisterEmailPasswordVC: ContinueButtonContainerViewDelegate {
+extension LoginVC: ContinueButtonContainerViewDelegate {
     func goToNextPage() {
-        guard let userInfo = userInfo else { return }
-        guard let name = userInfo["name"] as? String else { return }
         guard let email = emailTextField.text else { return }
         guard let password = passwordTextField.text else { return }
-        guard let image = userInfo["userImage"] as? UIImage else { return }
-
-        AuthManager.shared.register(withName: name, email: email, password: password, andImage: image) { (result) in
+     
+        AuthManager.shared.signIn(withEmail: email, andPassword: password) { (result) in
             switch result {
-                case .success(_):
-                    print("susscessfully signed up")
-                    self.dismiss(animated: true)
-                case .failure(let error):
-                    print(error.rawValue)
+            case .success(_):
+                self.dismiss(animated: true, completion: nil)
+            case .failure(let error):
+                print(error.rawValue)
             }
         }
     }
 }
 
-// MARK: - UITextFieldDelegate
-extension RegisterEmailPasswordVC: UITextFieldDelegate {
+// MARK: - UITextfieldDelegate
+extension LoginVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         switch textField {
         case emailTextField:

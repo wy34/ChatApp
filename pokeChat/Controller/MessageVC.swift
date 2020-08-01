@@ -78,6 +78,7 @@ class MessageVC: UIViewController {
     
     // MARK: - NavigationBar methods
     func setupNavBarButtons() {
+        navigationController?.navigationBar.tintColor = .systemGreen
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(logoutPressed))
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .compose, target: self, action: #selector(newMessagePressed))
     }
