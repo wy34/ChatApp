@@ -26,6 +26,15 @@ class MessageInputContainerView: UIView {
         return button
     }()
     
+    private let placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Enter a message"
+        label.font = UIFont.preferredFont(forTextStyle: .headline)
+        label.textColor = .lightGray
+        label.sizeToFit()
+        return label
+    }()
+    
     private lazy var inputTextView: UITextView = {
         let tv = UITextView()
         tv.delegate = self
@@ -65,6 +74,10 @@ class MessageInputContainerView: UIView {
         inputTextView.setDimension(width: widthAnchor, wMult: 0.8)
         inputTextView.center(to: self, by: .centerX, withMultiplierOf: 1.13)
         
+        addSubview(placeholderLabel)
+        placeholderLabel.center(y: inputTextView.centerYAnchor)
+        placeholderLabel.anchor(left: inputTextView.leftAnchor, paddingLeft: 15)
+        
         addSubview(sendButton)
         sendButton.setDimension(wConst: 27, hConst: 27)
         sendButton.anchor(right: inputTextView.rightAnchor, bottom: inputTextView.bottomAnchor, paddingRight: 5, paddingBottom: 5)
@@ -95,13 +108,7 @@ extension MessageInputContainerView: UITextViewDelegate {
                 constraints.constant = estimatedSize.height
             }
         }
-    }
-}
-
-// MARK: - UITextfieldDelegate
-extension MessageInputContainerView: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        handleSend()
-        return true
+        
+        placeholderLabel.isHidden = !inputTextView.text.isEmpty
     }
 }
