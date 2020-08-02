@@ -11,33 +11,58 @@ import UIKit
 class ChatVC: UICollectionViewController {
     // MARK: - Variables/Constants
     var chatPartner: User?
+    var inputFieldContainerBottom: NSLayoutConstraint?
     
     // MARK: - Subviews
     private lazy var inputFieldContainer: MessageInputContainerView = {
-        let view = MessageInputContainerView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 70))
+        let view = MessageInputContainerView()
         view.backgroundColor = .white
         view.delegate = self
         return view
     }()
-    
-    // MARK: - Input Accessory
-    override var inputAccessoryView: UIView? {
-        get {
-            return inputFieldContainer
-        }
-    }
-    
-    override var canBecomeFirstResponder: Bool {
-        return true
-    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavbarWithPartnerName()
         setupCollectionView()
+        layoutInputAccessoryView()
+        addKBObserver()
     }
     
+    // MARK: - Input Accessory
+    func layoutInputAccessoryView() {
+        view.addSubview(inputFieldContainer)
+        inputFieldContainer.anchor(right: view.rightAnchor, left: view.leftAnchor)
+        inputFieldContainerBottom = inputFieldContainer.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+        inputFieldContainerBottom?.isActive = true
+    }
+    
+    func addKBObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKBWilShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKBWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // MARK: - Selectors
+    @objc func handleKBWilShow(notification: Notification) {
+        if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let rect = frame.cgRectValue
+            let height = rect.height
+            
+            inputFieldContainerBottom?.constant = -height
+            view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func handleKBWillHide(notification: Notification) {
+        if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            UIView.animate(withDuration: duration) {
+                self.inputFieldContainerBottom?.constant = 0
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+
     // MARK: - Navbar config
     func setNavbarWithPartnerName() {
         guard let partner = chatPartner else { return }
@@ -55,7 +80,7 @@ class ChatVC: UICollectionViewController {
 }
 
 // MARK: - UICollectionViewDelegate/DataSource/FlowLayoutDelegate
-extension ChatVC: UICollectionViewDelegateFlowLayout { // }{: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
+extension ChatVC: UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 20
     }
@@ -73,7 +98,7 @@ extension ChatVC: UICollectionViewDelegateFlowLayout { // }{: UICollectionViewDe
 
 // MARK: - InputContainerViewDelegate
 extension ChatVC: InputContainerViewDelegate {
-    func send(message: String, inputField: UITextField) {
+    func send(message: String, inputField: UITextView) {
         guard let toId = chatPartner?.id else { return }
         DatabaseManager.shared.addMessage(of: message, toId: toId) { (result) in
             switch result {

@@ -9,7 +9,7 @@
 import UIKit
 
 protocol InputContainerViewDelegate {
-    func send(message: String, inputField: UITextField)
+    func send(message: String, inputField: UITextView)
 }
 
 class MessageInputContainerView: UIView {
@@ -17,28 +17,25 @@ class MessageInputContainerView: UIView {
     var delegate: InputContainerViewDelegate?
     
     // MARK: - Subviews
-    private let textFieldButtonContainer: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 19
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.lightGray.cgColor
-        return view
-    }()
-    
     private let sendButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: "arrow.up")?.withTintColor(.white, renderingMode: .alwaysOriginal), for: .normal)
         button.backgroundColor = .systemGreen
-        button.layer.cornerRadius = 14
+        button.layer.cornerRadius = 12.5
         button.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         return button
     }()
     
-    private lazy var inputTextField: UITextField = {
-        let tf = UITextField()
-        tf.placeholder = "Enter a message..."
-        tf.delegate = self
-        return tf
+    private lazy var inputTextView: UITextView = {
+        let tv = UITextView()
+        tv.delegate = self
+        tv.font = UIFont.preferredFont(forTextStyle: .headline)
+        tv.isScrollEnabled = false
+        tv.layer.cornerRadius = 18
+        tv.layer.borderWidth = 1
+        tv.layer.borderColor = UIColor.lightGray.cgColor
+        tv.textContainerInset = UIEdgeInsets(top: 8, left: 10, bottom: 8, right: 35)
+        return tv
     }()
     
     private let photoPickerButton: UIButton = {
@@ -63,24 +60,18 @@ class MessageInputContainerView: UIView {
     
     // MARK: - View layout
     func layoutViews() {
-        addSubview(textFieldButtonContainer)
-        textFieldButtonContainer.center(to: self, by: .centerY, withMultiplierOf: 0.8)
-        textFieldButtonContainer.setDimension(width: widthAnchor, height: heightAnchor, wMult: 0.8, hMult: 0.5)
-        textFieldButtonContainer.anchor(right: rightAnchor, paddingRight: 15)
+        addSubview(inputTextView)
+        inputTextView.anchor(top: topAnchor, bottom: bottomAnchor, paddingTop: 10, paddingBottom: 15)
+        inputTextView.setDimension(width: widthAnchor, wMult: 0.8)
+        inputTextView.center(to: self, by: .centerX, withMultiplierOf: 1.13)
         
-        textFieldButtonContainer.addSubview(sendButton)
-        sendButton.setDimension(width: textFieldButtonContainer.heightAnchor, height: textFieldButtonContainer.heightAnchor, wMult: 0.8, hMult: 0.8)
-        sendButton.anchor(right: textFieldButtonContainer.rightAnchor, paddingRight: 5)
-        sendButton.center(y: textFieldButtonContainer.centerYAnchor)
-        
-        textFieldButtonContainer.addSubview(inputTextField)
-        inputTextField.anchor(right: sendButton.leftAnchor, left: textFieldButtonContainer.leftAnchor, paddingRight: 15, paddingLeft: 15)
-        inputTextField.center(y: textFieldButtonContainer.centerYAnchor)
+        addSubview(sendButton)
+        sendButton.setDimension(wConst: 27, hConst: 27)
+        sendButton.anchor(right: inputTextView.rightAnchor, bottom: inputTextView.bottomAnchor, paddingRight: 5, paddingBottom: 5)
         
         addSubview(photoPickerButton)
-        photoPickerButton.anchor(right: textFieldButtonContainer.leftAnchor, left: leftAnchor, paddingRight: 10, paddingLeft: 10)
-        photoPickerButton.center(y: textFieldButtonContainer.centerYAnchor)
-        
+        photoPickerButton.anchor(right: inputTextView.leftAnchor, bottom: inputTextView.bottomAnchor, left: leftAnchor, paddingRight: 10, paddingBottom: 5, paddingLeft: 10)
+
         addSubview(inputContainerBorder)
         inputContainerBorder.anchor(top: topAnchor, right: rightAnchor, left: leftAnchor)
         inputContainerBorder.setDimension(hConst: 0.5)
@@ -88,8 +79,21 @@ class MessageInputContainerView: UIView {
     
     // MARK: - Selectors
     @objc func handleSend() {
-        if let message = inputTextField.text, !message.isEmpty {
-            delegate?.send(message: message, inputField: inputTextField)
+        if let message = inputTextView.text, !message.isEmpty {
+            delegate?.send(message: message, inputField: inputTextView)
+        }
+    }
+}
+
+// MARK: - UITextViewDelegate
+extension MessageInputContainerView: UITextViewDelegate {
+    func textViewDidChange(_ textView: UITextView) {
+        let estimatedSize = textView.sizeThatFits(CGSize(width: frame.width, height: .infinity))
+        
+        inputTextView.constraints.forEach { (constraints) in
+            if constraints.firstAttribute == .height {
+                constraints.constant = estimatedSize.height
+            }
         }
     }
 }
