@@ -72,6 +72,20 @@ class DatabaseManager {
     
     func getAllMessages(completion: @escaping (Result<[Message], ErrorMessage>) -> Void) {
         let ref = Database.database().reference().child("messages")
+        var messages = [Message]()
+        
+        ref.observe(.childAdded) { (snapshot) in
+            if let dicitonary = snapshot.value as? [String: AnyObject] {
+                let message = Message(dictionary: dicitonary)
+                messages.append(message)
+            }
+            
+            completion(.success(messages))
+        }
+    }
+    
+    func getConversations(completion: @escaping (Result<[Message], ErrorMessage>) -> Void) {
+        let ref = Database.database().reference().child("messages")
         var messagesArray = [Message]()
         var messagesDictionary = [String: Message]()
         guard let currentUid = Auth.auth().currentUser?.uid else { return }

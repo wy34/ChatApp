@@ -8,12 +8,23 @@
 
 import UIKit
 
-class ChatVC: UICollectionViewController {
+class ChatVC: UIViewController {
     // MARK: - Variables/Constants
     var chatPartner: User?
     var inputFieldContainerBottom: NSLayoutConstraint?
+    var messages = [Message]()
     
     // MARK: - Subviews
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.register(MessageCell.self, forCellWithReuseIdentifier: MessageCell.reuseId)
+        cv.backgroundColor = .white
+        cv.delegate = self
+        cv.dataSource = self
+        return cv
+    }()
+    
     private lazy var inputFieldContainer: MessageInputContainerView = {
         let view = MessageInputContainerView()
         view.backgroundColor = .white
@@ -25,9 +36,10 @@ class ChatVC: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setNavbarWithPartnerName()
-        setupCollectionView()
         layoutInputAccessoryView()
+        layoutCollectionView()
         addKBObserver()
+        getAllMessages()
     }
     
     // MARK: - Input Accessory
@@ -41,6 +53,19 @@ class ChatVC: UICollectionViewController {
     func addKBObserver() {
         NotificationCenter.default.addObserver(self, selector: #selector(handleKBWilShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(handleKBWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    // MARK: - Fetch methods
+    func getAllMessages() {
+        DatabaseManager.shared.getAllMessages { (result) in
+            switch result {
+                case .success(let messages):
+                    self.messages = messages
+                    self.collectionView.reloadData()
+                case .failure(_):
+                    print("Cannot fetch messages")
+            }
+        }
     }
     
     // MARK: - Selectors
@@ -70,24 +95,22 @@ class ChatVC: UICollectionViewController {
     }
     
     // MARK: - CollectionView configuration
-    func setupCollectionView() {
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "chatCell")
-        collectionView.backgroundColor = .white
-        collectionView.keyboardDismissMode = .interactive
-        collectionView.delegate = self
-        collectionView.dataSource = self
+    func layoutCollectionView() {
+        view.addSubview(collectionView)
+        collectionView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: inputFieldContainer.topAnchor, left: view.leftAnchor)
     }
 }
 
 // MARK: - UICollectionViewDelegate/DataSource/FlowLayoutDelegate
-extension ChatVC: UICollectionViewDelegateFlowLayout {
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return messages.count
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "chatCell", for: indexPath)
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MessageCell.reuseId, for: indexPath) as! MessageCell
         cell.backgroundColor = .green
+        cell.messageLabel.text = messages[indexPath.item].message
         return cell
     }
     
@@ -111,3 +134,4 @@ extension ChatVC: InputContainerViewDelegate {
         }
     }
 }
+

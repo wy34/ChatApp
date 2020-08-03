@@ -61,6 +61,7 @@ class MessageInputContainerView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layoutViews()
+        addSwipeToKB()
     }
     
     required init?(coder: NSCoder) {
@@ -90,11 +91,21 @@ class MessageInputContainerView: UIView {
         inputContainerBorder.setDimension(hConst: 0.5)
     }
     
+    func addSwipeToKB() {
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeDown))
+        swipeDown.direction = .down
+        addGestureRecognizer(swipeDown)
+    }
+    
     // MARK: - Selectors
     @objc func handleSend() {
         if let message = inputTextView.text, !message.isEmpty {
             delegate?.send(message: message, inputField: inputTextView)
         }
+    }
+    
+    @objc func handleSwipeDown() {
+        inputTextView.resignFirstResponder()
     }
 }
 

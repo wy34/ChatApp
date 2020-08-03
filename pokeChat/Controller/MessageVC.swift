@@ -11,7 +11,7 @@ import Firebase
 
 class MessageVC: UIViewController {
     // MARK: - Variables/Constants
-    var messages = [Message]()
+    var conversations = [Message]()
     var name = "William"
     
     // MARK: - Subviews: main
@@ -65,10 +65,10 @@ class MessageVC: UIViewController {
     }
     
     func getAllMessages() {
-        DatabaseManager.shared.getAllMessages { (result) in
+        DatabaseManager.shared.getConversations { (result) in
             switch result {
             case .success(let messages):
-                self.messages = messages
+                self.conversations = messages
                 self.tableView.reloadData()
             case .failure(_):
                 print("Error in getting all messages back")
@@ -144,18 +144,18 @@ class MessageVC: UIViewController {
 // MARK: - UITableView
 extension MessageVC: UITableViewDelegate, UITableViewDataSource {
     func goToChatVC(user: User) {
-        let chatVC = ChatVC(collectionViewLayout: UICollectionViewFlowLayout())
+        let chatVC = ChatVC()
         chatVC.chatPartner = user
         navigationController?.pushViewController(chatVC, animated: true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.messages.count
+        return self.conversations.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.reuseId, for: indexPath) as! UserCell
-        cell.message = messages[indexPath.item]
+        cell.message = conversations[indexPath.item]
         return cell
     }
     
@@ -164,7 +164,7 @@ extension MessageVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let chatPartnerId = messages[indexPath.row].chatPartnerId else { return }
+        guard let chatPartnerId = conversations[indexPath.row].chatPartnerId else { return }
         DatabaseManager.shared.getUserWith(id: chatPartnerId) { (result) in
             switch result {
             case .success(let user):
