@@ -146,6 +146,7 @@ extension MessageVC: UITableViewDelegate, UITableViewDataSource {
     func goToChatVC(user: User) {
         let chatVC = ChatVC()
         chatVC.chatPartner = user
+        chatVC.scrollToBottom()
         navigationController?.pushViewController(chatVC, animated: true)
     }
     

@@ -10,11 +10,13 @@ import UIKit
 
 protocol InputContainerViewDelegate {
     func send(message: String, inputField: UITextView)
+    func moveMessagesAboveInputContainer()
 }
 
 class MessageInputContainerView: UIView {
     // MARK: - Properties
     var delegate: InputContainerViewDelegate?
+    var inputTextViewBottomAnchor: NSLayoutConstraint?
     
     // MARK: - Subviews
     private let sendButton: UIButton = {
@@ -26,7 +28,7 @@ class MessageInputContainerView: UIView {
         return button
     }()
     
-    private let placeholderLabel: UILabel = {
+    let placeholderLabel: UILabel = {
         let label = UILabel()
         label.text = "Enter a message"
         label.font = UIFont.preferredFont(forTextStyle: .headline)
@@ -61,7 +63,7 @@ class MessageInputContainerView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         layoutViews()
-        addSwipeToKB()
+        addSwipeDownToKB()
     }
     
     required init?(coder: NSCoder) {
@@ -71,9 +73,12 @@ class MessageInputContainerView: UIView {
     // MARK: - View layout
     func layoutViews() {
         addSubview(inputTextView)
-        inputTextView.anchor(top: topAnchor, bottom: bottomAnchor, paddingTop: 10, paddingBottom: 15)
+        inputTextView.anchor(top: topAnchor, paddingTop: 10)
         inputTextView.setDimension(width: widthAnchor, wMult: 0.8)
         inputTextView.center(to: self, by: .centerX, withMultiplierOf: 1.13)
+        inputTextViewBottomAnchor = inputTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30)
+        inputTextViewBottomAnchor?.isActive = true
+        
         
         addSubview(placeholderLabel)
         placeholderLabel.center(y: inputTextView.centerYAnchor)
@@ -91,7 +96,8 @@ class MessageInputContainerView: UIView {
         inputContainerBorder.setDimension(hConst: 0.5)
     }
     
-    func addSwipeToKB() {
+    // MARK: - Gesture Recognizer
+    func addSwipeDownToKB() {
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeDown))
         swipeDown.direction = .down
         addGestureRecognizer(swipeDown)
@@ -111,12 +117,25 @@ class MessageInputContainerView: UIView {
 
 // MARK: - UITextViewDelegate
 extension MessageInputContainerView: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        inputTextViewBottomAnchor?.isActive = false
+        inputTextViewBottomAnchor = inputTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -12)
+        inputTextViewBottomAnchor?.isActive = true
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        inputTextViewBottomAnchor?.isActive = false
+        inputTextViewBottomAnchor = inputTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30)
+        inputTextViewBottomAnchor?.isActive = true
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         let estimatedSize = textView.sizeThatFits(CGSize(width: frame.width, height: .infinity))
         
         inputTextView.constraints.forEach { (constraints) in
             if constraints.firstAttribute == .height {
                 constraints.constant = estimatedSize.height
+                delegate?.moveMessagesAboveInputContainer()
             }
         }
         

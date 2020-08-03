@@ -62,6 +62,7 @@ class ChatVC: UIViewController {
                 case .success(let messages):
                     self.messages = messages
                     self.collectionView.reloadData()
+                    self.scrollToBottom()
                 case .failure(_):
                     print("Cannot fetch messages")
             }
@@ -76,6 +77,7 @@ class ChatVC: UIViewController {
             
             inputFieldContainerBottom?.constant = -height
             view.layoutIfNeeded()
+            scrollToBottom()
         }
     }
     
@@ -99,6 +101,13 @@ class ChatVC: UIViewController {
         view.addSubview(collectionView)
         collectionView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: inputFieldContainer.topAnchor, left: view.leftAnchor)
     }
+    
+    func scrollToBottom() {
+        if messages.count >= 1 {
+            let lastIndex = IndexPath(item: messages.count - 1, section: 0)
+            collectionView.scrollToItem(at: lastIndex, at: .bottom, animated: true)
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegate/DataSource/FlowLayoutDelegate
@@ -110,7 +119,8 @@ extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MessageCell.reuseId, for: indexPath) as! MessageCell
         cell.backgroundColor = .green
-        cell.messageLabel.text = messages[indexPath.item].message
+        cell.message = messages[indexPath.item]
+        cell.chatPartner = chatPartner
         return cell
     }
     
@@ -121,6 +131,10 @@ extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
 
 // MARK: - InputContainerViewDelegate
 extension ChatVC: InputContainerViewDelegate {
+    func moveMessagesAboveInputContainer() {
+        self.scrollToBottom()
+    }
+    
     func send(message: String, inputField: UITextView) {
         guard let toId = chatPartner?.id else { return }
         DatabaseManager.shared.addMessage(of: message, toId: toId) { (result) in
@@ -128,6 +142,7 @@ extension ChatVC: InputContainerViewDelegate {
             case .success(_):
                 print("Message sent!")
                 inputField.text = ""
+                self.inputFieldContainer.placeholderLabel.isHidden = false
             case .failure(let error):
                 print(error.rawValue)
             }
