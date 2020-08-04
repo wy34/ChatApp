@@ -19,7 +19,7 @@ class ContinueButtonContainerView: UIView {
     // MARK: - Subviews
     lazy var continueButton: CustomButton = {
         let button = CustomButton()
-        button.backgroundColor = .systemGreen
+        button.backgroundColor = Constants.Color.customGreen
         button.alpha = 0.5
         button.isEnabled = false
         button.setTitleColor(.white, for: .normal)

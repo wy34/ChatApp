@@ -62,7 +62,7 @@ class UserCell: UITableViewCell {
     }
     
     // MARK: - Subviews
-    private let userImageView: UIImageView = {
+    private lazy var userImageView: UIImageView = {
         let iv = UIImageView()
         iv.layer.cornerRadius = 28
         iv.layer.borderWidth = 1

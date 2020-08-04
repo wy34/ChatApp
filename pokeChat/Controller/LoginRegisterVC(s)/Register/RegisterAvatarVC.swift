@@ -30,7 +30,7 @@ class RegisterAvatarVC: ClearNavBarViewController {
         return button
     }()
     
-    private let continueButton = CustomButton(title: "Continue", bgColor: .systemGreen)
+    private let continueButton = CustomButton(title: "Continue", bgColor: Constants.Color.customGreen)
     
     // MARK: - Lifecycle
     override func viewDidLoad() {

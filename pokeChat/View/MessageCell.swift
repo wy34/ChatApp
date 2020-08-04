@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MessageCell: UICollectionViewCell {
+class MessageCell: UITableViewCell {
     // MARK: - Properties
     var message: Message? {
         didSet {
@@ -33,34 +33,35 @@ class MessageCell: UICollectionViewCell {
     static let reuseId = "messageCell"
     var bubbleViewLeftAnchor: NSLayoutConstraint?
     var bubbleViewRightAnchor: NSLayoutConstraint?
+    let bubbleViewCornerRadius: CGFloat = 16
     
     // MARK: - Subviews
-    let bubbleView: UIView = {
+    lazy var bubbleView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemGreen
-        view.layer.cornerRadius = 16
+        view.layer.cornerRadius = bubbleViewCornerRadius
         return view
     }()
     
     lazy var chatPartnerImageView: UIImageView = {
        let iv = UIImageView()
         iv.image = #imageLiteral(resourceName: "hippo")
-        iv.layer.cornerRadius = (frame.size.height * 0.4) / 2
+        iv.layer.cornerRadius = (frame.size.height * 0.35) / 2
         iv.layer.borderWidth = 1
         iv.clipsToBounds = true
         return iv
     }()
-    
-    let messageTextView: UITextView = {
-        let tv = UITextView()
-        tv.backgroundColor = .clear
-        tv.isEditable = false
-        return tv
+
+    lazy var messageLabel: UILabel = {
+        let label = UILabel()
+        label.layer.cornerRadius = bubbleViewCornerRadius
+        label.numberOfLines = 0
+        return label
     }()
     
     // MARK: - Init
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         layoutViews()
     }
     
@@ -72,13 +73,13 @@ class MessageCell: UICollectionViewCell {
     func configureCell() {
         guard let message = self.message else { return }
         
-        messageTextView.text = message.message
-        
         if message.chatPartnerId == message.toId {
+            bubbleView.backgroundColor = Constants.Color.customGreen
             bubbleViewRightAnchor?.isActive = true
             bubbleViewLeftAnchor?.isActive = false
             chatPartnerImageView.isHidden = true
         } else {
+            bubbleView.backgroundColor = #colorLiteral(red: 0.8913444877, green: 0.8954699636, blue: 0.9055526853, alpha: 1)
             bubbleViewLeftAnchor?.isActive = true
             bubbleViewRightAnchor?.isActive = false
             chatPartnerImageView.isHidden = false
@@ -88,17 +89,17 @@ class MessageCell: UICollectionViewCell {
     // MARK: - Layout views method
     func layoutViews() {
         addSubview(chatPartnerImageView)
-        chatPartnerImageView.setDimension(width: heightAnchor, height: heightAnchor, wMult: 0.4, hMult: 0.4)
+        chatPartnerImageView.setDimension(wConst: 30, hConst: 30)
         chatPartnerImageView.anchor(bottom: bottomAnchor, left: leftAnchor, paddingBottom: 10, paddingLeft: 10)
         
         addSubview(bubbleView)
-        bubbleView.anchor(bottom: chatPartnerImageView.bottomAnchor)
-        bubbleView.setDimension(width: widthAnchor, height: heightAnchor, wMult: 0.5, hMult: 0.8)
+        bubbleView.anchor(top: topAnchor, bottom: chatPartnerImageView.bottomAnchor, left: chatPartnerImageView.rightAnchor, paddingTop: 16, paddingLeft: 16)
+        bubbleView.setDimension(wConst: 250)
         
         bubbleViewLeftAnchor = bubbleView.leftAnchor.constraint(equalTo: chatPartnerImageView.rightAnchor, constant: 10)
         bubbleViewRightAnchor = bubbleView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10)
         
-        bubbleView.addSubview(messageTextView)
-        messageTextView.anchor(top: bubbleView.topAnchor, right: bubbleView.rightAnchor, bottom: bubbleView.bottomAnchor, left: bubbleView.leftAnchor)
+        bubbleView.addSubview(messageLabel)
+        messageLabel.anchor(top: bubbleView.topAnchor, right: bubbleView.rightAnchor, bottom: bubbleView.bottomAnchor, left: bubbleView.leftAnchor, paddingTop: 5, paddingRight: 10, paddingBottom: 5, paddingLeft: 10)
     }
 }

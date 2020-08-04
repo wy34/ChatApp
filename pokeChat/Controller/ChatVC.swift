@@ -13,16 +13,19 @@ class ChatVC: UIViewController {
     var chatPartner: User?
     var inputFieldContainerBottom: NSLayoutConstraint?
     var messages = [Message]()
+    let textMessages = [
+        "Here's my very first message",
+        "I'm going to message another long message that will word wrap",
+        "I'm going to message another long message that will word wrap, I'm going to message another long message that will word wrap, I'm going to message another long message that will word wrap"
+    ]
     
-    // MARK: - Subviews
-    private lazy var collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        cv.register(MessageCell.self, forCellWithReuseIdentifier: MessageCell.reuseId)
-        cv.backgroundColor = .white
-        cv.delegate = self
-        cv.dataSource = self
-        return cv
+    // MARK: - Subviews    
+    private lazy var tableView: UITableView = {
+        let tv = UITableView()
+        tv.register(MessageCell.self, forCellReuseIdentifier: "id")
+        tv.delegate = self
+        tv.dataSource = self
+        return tv
     }()
     
     private lazy var inputFieldContainer: MessageInputContainerView = {
@@ -37,7 +40,7 @@ class ChatVC: UIViewController {
         super.viewDidLoad()
         setNavbarWithPartnerName()
         layoutInputAccessoryView()
-        layoutCollectionView()
+        layoutTableView()
         addKBObserver()
         getAllMessages()
     }
@@ -61,7 +64,8 @@ class ChatVC: UIViewController {
             switch result {
                 case .success(let messages):
                     self.messages = messages
-                    self.collectionView.reloadData()
+                    //self.collectionView.reloadData()
+                    self.tableView.reloadData()
                     self.scrollToBottom()
                 case .failure(_):
                     print("Cannot fetch messages")
@@ -96,36 +100,31 @@ class ChatVC: UIViewController {
         self.navigationItem.title = partner.name
     }
     
-    // MARK: - CollectionView configuration
-    func layoutCollectionView() {
-        view.addSubview(collectionView)
-        collectionView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: inputFieldContainer.topAnchor, left: view.leftAnchor)
+    // MARK: - TableView configuration
+    func layoutTableView() {
+        view.addSubview(tableView)
+        tableView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: inputFieldContainer.topAnchor, left: view.leftAnchor)
     }
     
     func scrollToBottom() {
-        if messages.count >= 1 {
-            let lastIndex = IndexPath(item: messages.count - 1, section: 0)
-            collectionView.scrollToItem(at: lastIndex, at: .bottom, animated: true)
+        if textMessages.count >= 1 {
+            let lastIndex = IndexPath(row: textMessages.count - 1, section: 0)
+            tableView.scrollToRow(at: lastIndex, at: .bottom, animated: true)
         }
     }
 }
 
-// MARK: - UICollectionViewDelegate/DataSource/FlowLayoutDelegate
-extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return messages.count
+// MARK: - UITableViewDelegate/Datasource
+extension ChatVC: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return textMessages.count
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MessageCell.reuseId, for: indexPath) as! MessageCell
-        cell.backgroundColor = .green
-        cell.message = messages[indexPath.item]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! MessageCell
+        cell.messageLabel.text = textMessages[indexPath.row]
         cell.chatPartner = chatPartner
         return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 80)
     }
 }
 
