@@ -13,15 +13,11 @@ class ChatVC: UIViewController {
     var chatPartner: User?
     var inputFieldContainerBottom: NSLayoutConstraint?
     var messages = [Message]()
-    let textMessages = [
-        "Here's my very first message",
-        "I'm going to message another long message that will word wrap",
-        "I'm going to message another long message that will word wrap, I'm going to message another long message that will word wrap, I'm going to message another long message that will word wrap"
-    ]
     
     // MARK: - Subviews    
     private lazy var tableView: UITableView = {
         let tv = UITableView()
+        tv.separatorStyle = .none
         tv.register(MessageCell.self, forCellReuseIdentifier: "id")
         tv.delegate = self
         tv.dataSource = self
@@ -107,8 +103,8 @@ class ChatVC: UIViewController {
     }
     
     func scrollToBottom() {
-        if textMessages.count >= 1 {
-            let lastIndex = IndexPath(row: textMessages.count - 1, section: 0)
+        if messages.count >= 1 {
+            let lastIndex = IndexPath(row: messages.count - 1, section: 0)
             tableView.scrollToRow(at: lastIndex, at: .bottom, animated: true)
         }
     }
@@ -117,12 +113,12 @@ class ChatVC: UIViewController {
 // MARK: - UITableViewDelegate/Datasource
 extension ChatVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return textMessages.count
+        return messages.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! MessageCell
-        cell.messageLabel.text = textMessages[indexPath.row]
+        cell.message = messages[indexPath.row]
         cell.chatPartner = chatPartner
         return cell
     }

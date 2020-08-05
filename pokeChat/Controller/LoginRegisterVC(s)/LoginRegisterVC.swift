@@ -16,8 +16,8 @@ class LoginRegisterVC: UIViewController {
     // MARK: - Subviews
     private let appLogoImageView = UIImageView(image: UIImage(named: "pokeball"))
     private let titleLabel = UILabel()
-    private let signpButton = CustomButton(title: "Sign up", bgColor: Constants.Color.customGreen)
-    private let loginButton = CustomButton(title: "Log in", textColor: Constants.Color.customGreen)
+    private let signpButton = CustomButton(title: "Sign up", bgColor: Constants.Color.customGray)
+    private let loginButton = CustomButton(title: "Log in", textColor: Constants.Color.customGray)
     
     // MARK: - Lifecycle
     override func viewDidLoad() {

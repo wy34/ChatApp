@@ -40,6 +40,7 @@ class MessageCell: UITableViewCell {
         let view = UIView()
         view.backgroundColor = .systemGreen
         view.layer.cornerRadius = bubbleViewCornerRadius
+        view.sizeToFit()
         return view
     }()
     
@@ -72,13 +73,16 @@ class MessageCell: UITableViewCell {
     // MARK: - ConfigureCell method
     func configureCell() {
         guard let message = self.message else { return }
+        messageLabel.text = message.message
         
         if message.chatPartnerId == message.toId {
-            bubbleView.backgroundColor = Constants.Color.customGreen
+            messageLabel.textColor = .white
+            bubbleView.backgroundColor = Constants.Color.customGray
             bubbleViewRightAnchor?.isActive = true
             bubbleViewLeftAnchor?.isActive = false
             chatPartnerImageView.isHidden = true
         } else {
+            messageLabel.textColor = .black
             bubbleView.backgroundColor = #colorLiteral(red: 0.8913444877, green: 0.8954699636, blue: 0.9055526853, alpha: 1)
             bubbleViewLeftAnchor?.isActive = true
             bubbleViewRightAnchor?.isActive = false
@@ -89,17 +93,19 @@ class MessageCell: UITableViewCell {
     // MARK: - Layout views method
     func layoutViews() {
         addSubview(chatPartnerImageView)
-        chatPartnerImageView.setDimension(wConst: 30, hConst: 30)
+        chatPartnerImageView.setDimension(width: widthAnchor, height: widthAnchor, wMult: 0.07, hMult: 0.07)
+//        chatPartnerImageView.setDimension(wConst: 30, hConst: 30)
         chatPartnerImageView.anchor(bottom: bottomAnchor, left: leftAnchor, paddingBottom: 10, paddingLeft: 10)
         
         addSubview(bubbleView)
-        bubbleView.anchor(top: topAnchor, bottom: chatPartnerImageView.bottomAnchor, left: chatPartnerImageView.rightAnchor, paddingTop: 16, paddingLeft: 16)
-        bubbleView.setDimension(wConst: 250)
+        bubbleView.anchor(top: topAnchor, bottom: chatPartnerImageView.bottomAnchor, paddingTop: 16)
+        bubbleView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.75).isActive = true
+//        bubbleView.widthAnchor.constraint(lessThanOrEqualToConstant: 300).isActive = true
         
         bubbleViewLeftAnchor = bubbleView.leftAnchor.constraint(equalTo: chatPartnerImageView.rightAnchor, constant: 10)
         bubbleViewRightAnchor = bubbleView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10)
         
         bubbleView.addSubview(messageLabel)
-        messageLabel.anchor(top: bubbleView.topAnchor, right: bubbleView.rightAnchor, bottom: bubbleView.bottomAnchor, left: bubbleView.leftAnchor, paddingTop: 5, paddingRight: 10, paddingBottom: 5, paddingLeft: 10)
+        messageLabel.anchor(top: bubbleView.topAnchor, right: bubbleView.rightAnchor, bottom: bubbleView.bottomAnchor, left: bubbleView.leftAnchor, paddingTop: 10, paddingRight: 15, paddingBottom: 10, paddingLeft: 15)
     }
 }
