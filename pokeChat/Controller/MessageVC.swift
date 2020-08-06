@@ -12,12 +12,11 @@ import Firebase
 class MessageVC: UIViewController {
     // MARK: - Variables/Constants
     var conversations = [Message]()
-    var name = "William"
     
     // MARK: - Subviews: main
     private lazy var tableView: UITableView = {
         let tv = UITableView()
-        tv.register(UserCell.self, forCellReuseIdentifier: UserCell.reuseId)
+        tv.register(ConversationCell.self, forCellReuseIdentifier: ConversationCell.reuseId)
         tv.delegate = self
         tv.dataSource = self
         return tv
@@ -155,7 +154,7 @@ extension MessageVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: UserCell.reuseId, for: indexPath) as! UserCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ConversationCell.reuseId, for: indexPath) as! ConversationCell
         cell.message = conversations[indexPath.item]
         return cell
     }
