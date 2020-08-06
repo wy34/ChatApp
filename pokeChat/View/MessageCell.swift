@@ -47,7 +47,7 @@ class MessageCell: UITableViewCell {
     lazy var chatPartnerImageView: UIImageView = {
        let iv = UIImageView()
         iv.image = #imageLiteral(resourceName: "hippo")
-        iv.layer.cornerRadius = (frame.size.height * 0.35) / 2
+        iv.layer.cornerRadius = (frame.size.width * 0.07) / 2
         iv.layer.borderWidth = 1
         iv.clipsToBounds = true
         return iv
@@ -94,13 +94,11 @@ class MessageCell: UITableViewCell {
     func layoutViews() {
         addSubview(chatPartnerImageView)
         chatPartnerImageView.setDimension(width: widthAnchor, height: widthAnchor, wMult: 0.07, hMult: 0.07)
-//        chatPartnerImageView.setDimension(wConst: 30, hConst: 30)
         chatPartnerImageView.anchor(bottom: bottomAnchor, left: leftAnchor, paddingBottom: 10, paddingLeft: 10)
         
         addSubview(bubbleView)
         bubbleView.anchor(top: topAnchor, bottom: chatPartnerImageView.bottomAnchor, paddingTop: 16)
         bubbleView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.75).isActive = true
-//        bubbleView.widthAnchor.constraint(lessThanOrEqualToConstant: 300).isActive = true
         
         bubbleViewLeftAnchor = bubbleView.leftAnchor.constraint(equalTo: chatPartnerImageView.rightAnchor, constant: 10)
         bubbleViewRightAnchor = bubbleView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10)

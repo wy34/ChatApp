@@ -56,11 +56,11 @@ class ChatVC: UIViewController {
     
     // MARK: - Fetch methods
     func getAllMessages() {
-        DatabaseManager.shared.getAllMessages { (result) in
+        guard let chatPartner = self.chatPartner else { return }
+        DatabaseManager.shared.getAllMessages(chatPartner: chatPartner) { (result) in
             switch result {
                 case .success(let messages):
                     self.messages = messages
-                    //self.collectionView.reloadData()
                     self.tableView.reloadData()
                     self.scrollToBottom()
                 case .failure(_):
@@ -118,6 +118,7 @@ extension ChatVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! MessageCell
+        cell.selectionStyle = .none
         cell.message = messages[indexPath.row]
         cell.chatPartner = chatPartner
         return cell

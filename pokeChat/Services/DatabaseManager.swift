@@ -53,12 +53,12 @@ class DatabaseManager {
         }
     }
     
-    func addMessage(of message: String, toId partnerId: String, completion: @escaping (Result<Bool, ErrorMessage>) -> Void) {
+    func addMessage(of message: String, toId: String, completion: @escaping (Result<Bool, ErrorMessage>) -> Void) {
         let ref = Database.database().reference().child("messages").childByAutoId()
         
         guard let fromId = Auth.auth().currentUser?.uid else { return }
         let timeSent = Int(Date().timeIntervalSince1970)
-        let data = ["message": message, "fromId": fromId, "toId": partnerId, "timeSent": timeSent] as [String: AnyObject]
+        let data = ["message": message, "fromId": fromId, "toId": toId, "timeSent": timeSent] as [String: AnyObject]
         
         ref.updateChildValues(data) { (error, ref) in
             if let _ = error {
@@ -66,21 +66,40 @@ class DatabaseManager {
                 return
             }
             
+            let userMessagesRef = Database.database().reference().child("user-messages").child(fromId).child(toId)
+            if let messageId = ref.key {
+                userMessagesRef.updateChildValues([messageId: 1])
+            }
+            
+            let recipientUserMessagesRef = Database.database().reference().child("user-messages").child(toId).child(fromId)
+            if let messageId = ref.key {
+                recipientUserMessagesRef.updateChildValues([messageId: 1])
+            }
+            
             completion(.success(true))
         }
     }
     
-    func getAllMessages(completion: @escaping (Result<[Message], ErrorMessage>) -> Void) {
-        let ref = Database.database().reference().child("messages")
+    func getAllMessages(chatPartner: User, completion: @escaping (Result<[Message], ErrorMessage>) -> Void) {
         var messages = [Message]()
+        guard let currentId = Auth.auth().currentUser?.uid else { return }
+        guard let chatPartnerId = chatPartner.id else { return }
         
+        let ref = Database.database().reference().child("user-messages").child(currentId).child(chatPartnerId)
         ref.observe(.childAdded) { (snapshot) in
-            if let dicitonary = snapshot.value as? [String: AnyObject] {
-                let message = Message(dictionary: dicitonary)
-                messages.append(message)
-            }
+            let messageId = snapshot.key
             
-            completion(.success(messages))
+            let messagesRef = Database.database().reference().child("messages").child(messageId)
+            messagesRef.observeSingleEvent(of: .value) { (snapshot) in
+                if let dictionary = snapshot.value as? [String: AnyObject] {
+                    let message = Message(dictionary: dictionary)
+                    messages.append(message)
+                }
+                
+                DispatchQueue.main.async {
+                    completion(.success(messages))
+                }
+            }
         }
     }
     

@@ -79,7 +79,6 @@ class MessageInputContainerView: UIView {
         inputTextViewBottomAnchor = inputTextView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -30)
         inputTextViewBottomAnchor?.isActive = true
         
-        
         addSubview(placeholderLabel)
         placeholderLabel.center(y: inputTextView.centerYAnchor)
         placeholderLabel.anchor(left: inputTextView.leftAnchor, paddingLeft: 15)

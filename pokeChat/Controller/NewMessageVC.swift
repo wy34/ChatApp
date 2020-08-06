@@ -33,7 +33,7 @@ class NewMessageVC: UIViewController {
     
     // MARK: - NavBar methods
     func configureNavBar() {
-        navigationController?.navigationBar.tintColor = .systemGreen
+        navigationController?.navigationBar.tintColor = Constants.Color.customGray
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(handleCancel))
     }
     
