@@ -11,14 +11,15 @@ import UIKit
 class UserCell: UITableViewCell {
     // MARK: - Variables/constants
     static let reuseId = "userCell"
-    let dateFormatter = DateFormatter()
-    
+    var dateFormatter = DateFormatter()
+
     var user: User? {
         didSet {
             guard let user = user else { return }
-            textLabel?.text = user.name
-            detailTextLabel?.text = user.email
+            nameLabel.text = user.name
+            previewEmailLabel.text = user.email
             timeLabel.isHidden = true
+            disclosureIndicator.isHidden = true
             
             NetworkManager.shared.downloadImage(forUrl: user.imageUrl!) { (result) in
                 switch result {
@@ -40,9 +41,10 @@ class UserCell: UITableViewCell {
             DatabaseManager.shared.getUserWith(id: chatPartnerId) { (result) in
                 switch result {
                 case .success(let user):
-                    self.textLabel?.text = user.name
-                    self.detailTextLabel?.text = message.message
+                    self.nameLabel.text = user.name
+                    self.previewEmailLabel.text = message.message
                     self.timeLabel.text = self.getDateAndTimeStringFrom(seconds: message.timeSent!)
+
                     
                     if let imageUrl = user.imageUrl {
                         NetworkManager.shared.downloadImage(forUrl: imageUrl) { (result) in
@@ -62,7 +64,7 @@ class UserCell: UITableViewCell {
     }
     
     // MARK: - Subviews
-    private lazy var userImageView: UIImageView = {
+    lazy var userImageView: UIImageView = {
         let iv = UIImageView()
         iv.layer.cornerRadius = 28
         iv.layer.borderWidth = 1
@@ -73,7 +75,28 @@ class UserCell: UITableViewCell {
     private let timeLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 10)
+        label.textAlignment = .center
         return label
+    }()
+    
+    private let nameLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 16)
+        return label
+    }()
+    
+    private let previewEmailLabel: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 2
+        label.font = UIFont.systemFont(ofSize: 12)
+        return label
+    }()
+    
+    private let disclosureIndicator: UIImageView = {
+        let iv = UIImageView(image: UIImage(systemName: "chevron.right"))
+        iv.tintColor = .lightGray
+        iv.contentMode = .scaleAspectFit
+        return iv
     }()
     
     // MARK: - Initializers
@@ -98,16 +121,30 @@ class UserCell: UITableViewCell {
         userImageView.anchor(left: leftAnchor, paddingLeft: 10)
         userImageView.center(y: centerYAnchor)
         userImageView.setDimension(width: heightAnchor, height: heightAnchor, wMult: 0.70, hMult: 0.70)
+    
+        addSubview(nameLabel)
+        nameLabel.setDimension(width: widthAnchor, wMult: 0.4)
+        nameLabel.anchor(left: userImageView.rightAnchor, paddingLeft: 10)
+        nameLabel.center(to: self, by: .centerY, withMultiplierOf: 0.5)
+
+        addSubview(previewEmailLabel)
+        previewEmailLabel.anchor(top: nameLabel.bottomAnchor, bottom: bottomAnchor, left: nameLabel.leftAnchor, paddingTop: 5, paddingBottom: 10)
+        previewEmailLabel.anchor(bottom: bottomAnchor, left: nameLabel.leftAnchor, paddingBottom: 10)
+        previewEmailLabel.setDimension(width: widthAnchor, wMult: 0.77)
+
+        addSubview(disclosureIndicator)
+        disclosureIndicator.anchor(top: nameLabel.topAnchor, right: previewEmailLabel.rightAnchor, paddingRight: -3)
+        disclosureIndicator.setDimension(width: heightAnchor, height: heightAnchor, wMult: 0.23, hMult: 0.23)
         
         addSubview(timeLabel)
-        timeLabel.anchor(top: topAnchor, right: rightAnchor, paddingTop: 10, paddingRight: 10)
-    
+        timeLabel.anchor(right: disclosureIndicator.leftAnchor, left: nameLabel.rightAnchor)
+        timeLabel.center(y: disclosureIndicator.centerYAnchor)
     }
     
     // MARK: - Helper functions
     func getDateAndTimeStringFrom(seconds: Int) -> String {
         let date = Date(timeIntervalSince1970: Double(seconds))
-        dateFormatter.dateFormat = "MM/dd/yyyy, h:mm:ss a"
+        dateFormatter.dateFormat = "M/dd/yy, h:mm:ss a"
         let dateString = dateFormatter.string(from: date)
         return dateString
     }
