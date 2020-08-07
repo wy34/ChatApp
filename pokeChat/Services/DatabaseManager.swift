@@ -43,9 +43,11 @@ class DatabaseManager {
         
         ref.observe(.childAdded) { (snapshot) in
             if var dictionary = snapshot.value as? [String: AnyObject] {
-                dictionary["id"] = snapshot.key as AnyObject
-                let user = User(dictionary: dictionary)
-                users.append(user)
+                if snapshot.key != Auth.auth().currentUser?.uid {
+                    dictionary["id"] = snapshot.key as AnyObject
+                    let user = User(dictionary: dictionary)
+                    users.append(user)
+                }
             }
             DispatchQueue.main.async {
                 completion(.success(users))
@@ -53,6 +55,8 @@ class DatabaseManager {
         }
     }
     
+    
+    // MARK: - Next step: save image message to database -> make this method dynamic
     func addMessage(of message: String, toId: String, completion: @escaping (Result<Bool, ErrorMessage>) -> Void) {
         let ref = Database.database().reference().child("messages").childByAutoId()
         
@@ -123,6 +127,29 @@ class DatabaseManager {
             }
             DispatchQueue.main.async {
                 completion(.success(messagesArray))
+            }
+        }
+    }
+    
+    func store(image: UIImage, completion: @escaping (Result<String, ErrorMessage>) -> Void) {
+        let imageName = UUID()
+        let ref = Storage.storage().reference().child("messageImages").child("\(imageName)")
+        guard let imageData = image.jpegData(compressionQuality: 0.2) else { return }
+        
+        ref.putData(imageData, metadata: nil) { (metaData, error) in
+            if let _ = error {
+                completion(.failure(.PutDataError))
+                return
+            }
+            
+            ref.downloadURL { (url, error) in
+                if let _ = error {
+                    completion(.failure(.DownloadUrlError))
+                    return
+                }
+                
+                guard let urlString = url?.absoluteString else { return }
+                completion(.success(urlString))
             }
         }
     }

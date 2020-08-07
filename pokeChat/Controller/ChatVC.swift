@@ -127,6 +127,14 @@ extension ChatVC: UITableViewDelegate, UITableViewDataSource {
 
 // MARK: - InputContainerViewDelegate
 extension ChatVC: InputContainerViewDelegate {
+    func dismissImagePicker() {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func present(imagePicker: UIImagePickerController) {
+        self.present(imagePicker, animated: true)
+    }
+
     func moveMessagesAboveInputContainer() {
         self.scrollToBottom()
     }

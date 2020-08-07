@@ -11,6 +11,8 @@ import UIKit
 protocol InputContainerViewDelegate {
     func send(message: String, inputField: UITextView)
     func moveMessagesAboveInputContainer()
+    func present(imagePicker: UIImagePickerController)
+    func dismissImagePicker()
 }
 
 class MessageInputContainerView: UIView {
@@ -54,6 +56,7 @@ class MessageInputContainerView: UIView {
         let largeFont = UIImage.SymbolConfiguration(font: UIFont.systemFont(ofSize: 20))
         button.setImage(UIImage(systemName: "photo", withConfiguration: largeFont), for: .normal)
         button.tintColor = Constants.Color.customGray
+        button.addTarget(self, action: #selector(handleImagePicker), for: .touchUpInside)
         return button
     }()
     
@@ -112,6 +115,14 @@ class MessageInputContainerView: UIView {
     @objc func handleSwipeDown() {
         inputTextView.resignFirstResponder()
     }
+    
+    @objc func handleImagePicker() {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.allowsEditing = true
+        delegate?.present(imagePicker: imagePicker)
+    }
 }
 
 // MARK: - UITextViewDelegate
@@ -139,5 +150,23 @@ extension MessageInputContainerView: UITextViewDelegate {
         }
         
         placeholderLabel.isHidden = !inputTextView.text.isEmpty
+    }
+}
+
+// MARK: - UIImagePickerControllerDelegate/UINavigationControllerDelegate
+extension MessageInputContainerView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let selectedImage = info[.editedImage] as? UIImage else { return }
+        
+        
+        DatabaseManager.shared.store(image: selectedImage) { (result) in
+            switch result {
+            case .success(let imageURl):
+                // save url, imageDimensions, fromId, toId, and time to database
+                self.delegate?.dismissImagePicker()
+            case .failure(let error):
+                print(error.rawValue)
+            }
+        }
     }
 }
