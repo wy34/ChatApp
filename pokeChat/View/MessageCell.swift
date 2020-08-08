@@ -72,10 +72,15 @@ class MessageCell: UITableViewCell {
     
     // MARK: - ConfigureCell method
     func configureCell() {
-        guard let message = self.message else { return }
-        messageLabel.text = message.message
+        guard let messageObj = self.message else { return }
         
-        if message.chatPartnerId == message.toId {
+        if let messageText = messageObj.message {
+            messageLabel.text = messageText
+        } else {
+            messageLabel.text = "Image"
+        }
+        
+        if messageObj.chatPartnerId == messageObj.toId {
             messageLabel.textColor = .white
             bubbleView.backgroundColor = Constants.Color.customGray
             bubbleViewRightAnchor?.isActive = true

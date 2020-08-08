@@ -14,6 +14,9 @@ class Message {
     var toId: String?
     var message: String?
     var timeSent: Int?
+    var imageUrl: String?
+    var imageHeight: Int?
+    var imageWidth: Int?
     
     var chatPartnerId: String? {
         return Auth.auth().currentUser?.uid == fromId ? toId! : fromId!

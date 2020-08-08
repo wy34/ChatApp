@@ -27,6 +27,7 @@ class ChatVC: UIViewController {
     private lazy var inputFieldContainer: MessageInputContainerView = {
         let view = MessageInputContainerView()
         view.backgroundColor = .white
+        view.chatPartner = self.chatPartner
         view.delegate = self
         return view
     }()
@@ -141,7 +142,8 @@ extension ChatVC: InputContainerViewDelegate {
     
     func send(message: String, inputField: UITextView) {
         guard let toId = chatPartner?.id else { return }
-        DatabaseManager.shared.addMessage(of: message, toId: toId) { (result) in
+        let properties = ["message": message] as [String: AnyObject]
+        DatabaseManager.shared.addMessage(withProperties: properties, toId: toId) { (result) in
             switch result {
             case .success(_):
                 print("Message sent!")

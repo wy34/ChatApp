@@ -19,6 +19,7 @@ class MessageInputContainerView: UIView {
     // MARK: - Properties
     var delegate: InputContainerViewDelegate?
     var inputTextViewBottomAnchor: NSLayoutConstraint?
+    var chatPartner: User?
     
     // MARK: - Subviews
     private let sendButton: UIButton = {
@@ -157,13 +158,20 @@ extension MessageInputContainerView: UITextViewDelegate {
 extension MessageInputContainerView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let selectedImage = info[.editedImage] as? UIImage else { return }
-        
-        
+    
         DatabaseManager.shared.store(image: selectedImage) { (result) in
             switch result {
-            case .success(let imageURl):
-                // save url, imageDimensions, fromId, toId, and time to database
-                self.delegate?.dismissImagePicker()
+            case .success(let imageUrlString):
+                guard let chatPartnerId = self.chatPartner?.id else { return }
+                let properties = ["imageUrl": imageUrlString, "imageHeight": selectedImage.size.height, "imageWidth": selectedImage.size.width] as [String: AnyObject]
+                DatabaseManager.shared.addMessage(withProperties: properties, toId: chatPartnerId) { (result) in
+                    switch result {
+                    case .success(_):
+                        self.delegate?.dismissImagePicker()
+                    case .failure(let error):
+                        print(error.rawValue)
+                    }
+                }
             case .failure(let error):
                 print(error.rawValue)
             }

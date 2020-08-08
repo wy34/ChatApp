@@ -55,14 +55,16 @@ class DatabaseManager {
         }
     }
     
-    
-    // MARK: - Next step: save image message to database -> make this method dynamic
-    func addMessage(of message: String, toId: String, completion: @escaping (Result<Bool, ErrorMessage>) -> Void) {
+    func addMessage(withProperties properties: [String: AnyObject], toId: String, completion: @escaping (Result<Bool, ErrorMessage>) -> Void) {
         let ref = Database.database().reference().child("messages").childByAutoId()
         
         guard let fromId = Auth.auth().currentUser?.uid else { return }
         let timeSent = Int(Date().timeIntervalSince1970)
-        let data = ["message": message, "fromId": fromId, "toId": toId, "timeSent": timeSent] as [String: AnyObject]
+        var data = ["fromId": fromId, "toId": toId, "timeSent": timeSent] as [String: AnyObject]
+        
+        properties.forEach {
+            data[$0] = $1
+        }
         
         ref.updateChildValues(data) { (error, ref) in
             if let _ = error {
