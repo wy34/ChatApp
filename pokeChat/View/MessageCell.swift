@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MessageCell: UITableViewCell {
+class MessageCell: UICollectionViewCell {
     // MARK: - Properties
     var message: Message? {
         didSet {
@@ -60,9 +60,17 @@ class MessageCell: UITableViewCell {
         return label
     }()
     
+    let messageImageView: UIImageView = {
+        let iv = UIImageView()
+        iv.image = UIImage(named: "land")
+        iv.contentMode = .scaleToFill
+        iv.isHidden = true
+        return iv
+    }()
+    
     // MARK: - Init
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         layoutViews()
     }
     
@@ -75,9 +83,18 @@ class MessageCell: UITableViewCell {
         guard let messageObj = self.message else { return }
         
         if let messageText = messageObj.message {
+            messageImageView.isHidden = true
             messageLabel.text = messageText
-        } else {
-            messageLabel.text = "Image"
+        } else if messageObj.imageUrl != nil {
+            NetworkManager.shared.downloadImage(forUrl: messageObj.imageUrl!) { (result) in
+                switch result {
+                    case .success(let image):
+                        self.messageImageView.image = image
+                        self.messageImageView.isHidden = false
+                    case .failure(let error):
+                        print(error.rawValue)
+                }
+            }
         }
         
         if messageObj.chatPartnerId == messageObj.toId {
@@ -95,6 +112,16 @@ class MessageCell: UITableViewCell {
         }
     }
     
+    func setImageToLabel(withImage image: UIImage, height: Int, width: Int) {
+        let mutableString = NSMutableAttributedString()
+        let attachment = NSTextAttachment()
+        attachment.image = image
+        attachment.image = UIImage(cgImage: attachment.image!.cgImage!, scale: CGFloat(CGFloat(width)/bubbleView.frame.size.width), orientation: .up)
+        let imageString = NSAttributedString(attachment: attachment)
+        mutableString.append(imageString)
+        self.messageLabel.attributedText = mutableString
+    }
+    
     // MARK: - Layout views method
     func layoutViews() {
         addSubview(chatPartnerImageView)
@@ -110,5 +137,8 @@ class MessageCell: UITableViewCell {
         
         bubbleView.addSubview(messageLabel)
         messageLabel.anchor(top: bubbleView.topAnchor, right: bubbleView.rightAnchor, bottom: bubbleView.bottomAnchor, left: bubbleView.leftAnchor, paddingTop: 10, paddingRight: 15, paddingBottom: 10, paddingLeft: 15)
+        
+        bubbleView.addSubview(messageImageView)
+        messageImageView.anchor(top: bubbleView.topAnchor, right: bubbleView.rightAnchor, bottom: bubbleView.bottomAnchor, left: bubbleView.leftAnchor)
     }
 }

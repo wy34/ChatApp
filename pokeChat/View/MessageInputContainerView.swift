@@ -158,7 +158,6 @@ extension MessageInputContainerView: UITextViewDelegate {
 extension MessageInputContainerView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let selectedImage = info[.editedImage] as? UIImage else { return }
-    
         DatabaseManager.shared.store(image: selectedImage) { (result) in
             switch result {
             case .success(let imageUrlString):

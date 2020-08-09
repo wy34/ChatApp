@@ -14,14 +14,15 @@ class ChatVC: UIViewController {
     var inputFieldContainerBottom: NSLayoutConstraint?
     var messages = [Message]()
     
-    // MARK: - Subviews    
-    private lazy var tableView: UITableView = {
-        let tv = UITableView()
-        tv.separatorStyle = .none
-        tv.register(MessageCell.self, forCellReuseIdentifier: "id")
-        tv.delegate = self
-        tv.dataSource = self
-        return tv
+    // MARK: - Subviews
+    private lazy var collectionView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        cv.backgroundColor = .white
+        cv.register(MessageCell.self, forCellWithReuseIdentifier: MessageCell.reuseId)
+        cv.delegate = self
+        cv.dataSource = self
+        return cv
     }()
     
     private lazy var inputFieldContainer: MessageInputContainerView = {
@@ -37,7 +38,7 @@ class ChatVC: UIViewController {
         super.viewDidLoad()
         setNavbarWithPartnerName()
         layoutInputAccessoryView()
-        layoutTableView()
+        layoutCollectionView()
         addKBObserver()
         getAllMessages()
     }
@@ -62,7 +63,7 @@ class ChatVC: UIViewController {
             switch result {
                 case .success(let messages):
                     self.messages = messages
-                    self.tableView.reloadData()
+                    self.collectionView.reloadData()
                     self.scrollToBottom()
                 case .failure(_):
                     print("Cannot fetch messages")
@@ -98,31 +99,35 @@ class ChatVC: UIViewController {
     }
     
     // MARK: - TableView configuration
-    func layoutTableView() {
-        view.addSubview(tableView)
-        tableView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: inputFieldContainer.topAnchor, left: view.leftAnchor)
+    func layoutCollectionView() {
+//        view.addSubview(tableView)
+        view.addSubview(collectionView)
+//        tableView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: inputFieldContainer.topAnchor, left: view.leftAnchor)
+        collectionView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: inputFieldContainer.topAnchor, left: view.leftAnchor)
     }
     
     func scrollToBottom() {
         if messages.count >= 1 {
             let lastIndex = IndexPath(row: messages.count - 1, section: 0)
-            tableView.scrollToRow(at: lastIndex, at: .bottom, animated: true)
+            collectionView.scrollToItem(at: lastIndex, at: .bottom, animated: true)
         }
     }
 }
 
-// MARK: - UITableViewDelegate/Datasource
-extension ChatVC: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+// MARK: - UICollectionViewDelegate/Datasource/FlowLayoutDelegate
+extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return messages.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "id", for: indexPath) as! MessageCell
-        cell.selectionStyle = .none
-        cell.message = messages[indexPath.row]
-        cell.chatPartner = chatPartner
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MessageCell.reuseId, for: indexPath) as! MessageCell
+        cell.message = messages[indexPath.item]
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: view.frame.width, height: 80)
     }
 }
 
