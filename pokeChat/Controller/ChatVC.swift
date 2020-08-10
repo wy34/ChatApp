@@ -61,12 +61,13 @@ class ChatVC: UIViewController {
         guard let chatPartner = self.chatPartner else { return }
         DatabaseManager.shared.getAllMessages(chatPartner: chatPartner) { (result) in
             switch result {
-                case .success(let messages):
-                    self.messages = messages
-                    self.collectionView.reloadData()
-                    self.scrollToBottom()
-                case .failure(_):
-                    print("Cannot fetch messages")
+            case .success(let messages):
+                self.messages = messages
+                print(self.messages[0].imageUrl)
+                self.collectionView.reloadData()
+                self.scrollToBottom()
+            case .failure(_):
+                print("Cannot fetch messages")
             }
         }
     }
@@ -91,18 +92,16 @@ class ChatVC: UIViewController {
             }
         }
     }
-
+    
     // MARK: - Navbar config
     func setNavbarWithPartnerName() {
         guard let partner = chatPartner else { return }
         self.navigationItem.title = partner.name
     }
     
-    // MARK: - TableView configuration
+    // MARK: - CollectionView configuration
     func layoutCollectionView() {
-//        view.addSubview(tableView)
         view.addSubview(collectionView)
-//        tableView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: inputFieldContainer.topAnchor, left: view.leftAnchor)
         collectionView.anchor(top: view.topAnchor, right: view.rightAnchor, bottom: inputFieldContainer.topAnchor, left: view.leftAnchor)
     }
     
@@ -123,11 +122,34 @@ extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MessageCell.reuseId, for: indexPath) as! MessageCell
         cell.message = messages[indexPath.item]
+        cell.backgroundColor = .blue
+        
+        if let text = messages[indexPath.item].message {
+            cell.bubbleWidthAnchor?.constant = estimateFrameForText(text: text).width + 32
+        } else if messages[indexPath.item].imageUrl != nil {
+            cell.bubbleWidthAnchor?.constant = 250
+        }
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 80)
+        var height: CGFloat = 80
+        let message = messages[indexPath.item]
+        
+        if let text = message.message {
+            height = estimateFrameForText(text: text).height + 20
+        } else if let imageHeight = message.imageHeight, let imageWidth = message.imageWidth {
+            height = CGFloat(Float(imageHeight) / Float(imageWidth) * 250)
+        }
+        
+        return CGSize(width: view.frame.width, height: height)
+    }
+    
+    func estimateFrameForText(text: String) -> CGRect {
+        let size = CGSize(width: 250, height: 1000)
+        let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
+        return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 16)], context: nil)
     }
 }
 
@@ -140,7 +162,7 @@ extension ChatVC: InputContainerViewDelegate {
     func present(imagePicker: UIImagePickerController) {
         self.present(imagePicker, animated: true)
     }
-
+    
     func moveMessagesAboveInputContainer() {
         self.scrollToBottom()
     }

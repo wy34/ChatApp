@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class MessageCell: UICollectionViewCell {
     // MARK: - Properties
@@ -33,6 +34,7 @@ class MessageCell: UICollectionViewCell {
     static let reuseId = "messageCell"
     var bubbleViewLeftAnchor: NSLayoutConstraint?
     var bubbleViewRightAnchor: NSLayoutConstraint?
+    var bubbleWidthAnchor: NSLayoutConstraint?
     let bubbleViewCornerRadius: CGFloat = 16
     
     // MARK: - Subviews
@@ -53,11 +55,13 @@ class MessageCell: UICollectionViewCell {
         return iv
     }()
 
-    lazy var messageLabel: UILabel = {
-        let label = UILabel()
-        label.layer.cornerRadius = bubbleViewCornerRadius
-        label.numberOfLines = 0
-        return label
+    lazy var messageTextView: UITextView = {
+        let tv = UITextView()
+        tv.layer.cornerRadius = bubbleViewCornerRadius
+        tv.isEditable = false
+        tv.backgroundColor = .green
+        tv.font = UIFont.systemFont(ofSize: 16)
+        return tv
     }()
     
     let messageImageView: UIImageView = {
@@ -65,6 +69,7 @@ class MessageCell: UICollectionViewCell {
         iv.image = UIImage(named: "land")
         iv.contentMode = .scaleToFill
         iv.isHidden = true
+        iv.clipsToBounds = true
         return iv
     }()
     
@@ -84,13 +89,15 @@ class MessageCell: UICollectionViewCell {
         
         if let messageText = messageObj.message {
             messageImageView.isHidden = true
-            messageLabel.text = messageText
+            messageTextView.isHidden = false
+            messageTextView.text = messageText
         } else if messageObj.imageUrl != nil {
             NetworkManager.shared.downloadImage(forUrl: messageObj.imageUrl!) { (result) in
                 switch result {
                     case .success(let image):
-                        self.messageImageView.image = image
                         self.messageImageView.isHidden = false
+                        self.messageTextView.isHidden = true
+                        self.messageImageView.image = image
                     case .failure(let error):
                         print(error.rawValue)
                 }
@@ -98,13 +105,13 @@ class MessageCell: UICollectionViewCell {
         }
         
         if messageObj.chatPartnerId == messageObj.toId {
-            messageLabel.textColor = .white
+            messageTextView.textColor = .white
             bubbleView.backgroundColor = Constants.Color.customGray
             bubbleViewRightAnchor?.isActive = true
             bubbleViewLeftAnchor?.isActive = false
             chatPartnerImageView.isHidden = true
         } else {
-            messageLabel.textColor = .black
+            messageTextView.textColor = .black
             bubbleView.backgroundColor = #colorLiteral(red: 0.8913444877, green: 0.8954699636, blue: 0.9055526853, alpha: 1)
             bubbleViewLeftAnchor?.isActive = true
             bubbleViewRightAnchor?.isActive = false
@@ -112,33 +119,26 @@ class MessageCell: UICollectionViewCell {
         }
     }
     
-    func setImageToLabel(withImage image: UIImage, height: Int, width: Int) {
-        let mutableString = NSMutableAttributedString()
-        let attachment = NSTextAttachment()
-        attachment.image = image
-        attachment.image = UIImage(cgImage: attachment.image!.cgImage!, scale: CGFloat(CGFloat(width)/bubbleView.frame.size.width), orientation: .up)
-        let imageString = NSAttributedString(attachment: attachment)
-        mutableString.append(imageString)
-        self.messageLabel.attributedText = mutableString
-    }
-    
     // MARK: - Layout views method
     func layoutViews() {
         addSubview(chatPartnerImageView)
-        chatPartnerImageView.setDimension(width: widthAnchor, height: widthAnchor, wMult: 0.07, hMult: 0.07)
-        chatPartnerImageView.anchor(bottom: bottomAnchor, left: leftAnchor, paddingBottom: 10, paddingLeft: 10)
+        chatPartnerImageView.anchor(bottom: bottomAnchor, left: leftAnchor, paddingLeft: 8)
+        chatPartnerImageView.setDimension(wConst: 32, hConst: 32)
         
         addSubview(bubbleView)
-        bubbleView.anchor(top: topAnchor, bottom: chatPartnerImageView.bottomAnchor, paddingTop: 16)
-        bubbleView.widthAnchor.constraint(lessThanOrEqualTo: widthAnchor, multiplier: 0.75).isActive = true
-        
-        bubbleViewLeftAnchor = bubbleView.leftAnchor.constraint(equalTo: chatPartnerImageView.rightAnchor, constant: 10)
-        bubbleViewRightAnchor = bubbleView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10)
-        
-        bubbleView.addSubview(messageLabel)
-        messageLabel.anchor(top: bubbleView.topAnchor, right: bubbleView.rightAnchor, bottom: bubbleView.bottomAnchor, left: bubbleView.leftAnchor, paddingTop: 10, paddingRight: 15, paddingBottom: 10, paddingLeft: 15)
+        bubbleView.anchor(top: topAnchor)
+        bubbleWidthAnchor = bubbleView.widthAnchor.constraint(equalToConstant: 250)
+        bubbleWidthAnchor?.isActive = true
+        bubbleView.setDimension(height: heightAnchor)
+        bubbleViewRightAnchor = bubbleView.rightAnchor.constraint(equalTo: rightAnchor, constant: -8)
+        bubbleViewLeftAnchor = bubbleView.leftAnchor.constraint(equalTo: chatPartnerImageView.rightAnchor, constant: 8)
         
         bubbleView.addSubview(messageImageView)
         messageImageView.anchor(top: bubbleView.topAnchor, right: bubbleView.rightAnchor, bottom: bubbleView.bottomAnchor, left: bubbleView.leftAnchor)
+        
+        addSubview(messageTextView)
+        messageTextView.anchor(top: topAnchor, right: bubbleView.rightAnchor, left: bubbleView.leftAnchor)
+        messageTextView.setDimension(height: heightAnchor)
     }
 }
+
