@@ -63,7 +63,6 @@ class ChatVC: UIViewController {
             switch result {
             case .success(let messages):
                 self.messages = messages
-                print(self.messages[0].imageUrl)
                 self.collectionView.reloadData()
                 self.scrollToBottom()
             case .failure(_):
@@ -122,6 +121,7 @@ extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MessageCell.reuseId, for: indexPath) as! MessageCell
         cell.message = messages[indexPath.item]
+        cell.chatPartner = chatPartner
         cell.backgroundColor = .blue
         
         if let text = messages[indexPath.item].message {

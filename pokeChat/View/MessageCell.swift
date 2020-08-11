@@ -40,7 +40,6 @@ class MessageCell: UICollectionViewCell {
     // MARK: - Subviews
     lazy var bubbleView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemGreen
         view.layer.cornerRadius = bubbleViewCornerRadius
         view.sizeToFit()
         return view
@@ -48,8 +47,7 @@ class MessageCell: UICollectionViewCell {
     
     lazy var chatPartnerImageView: UIImageView = {
        let iv = UIImageView()
-        iv.image = #imageLiteral(resourceName: "hippo")
-        iv.layer.cornerRadius = (frame.size.width * 0.07) / 2
+        iv.layer.cornerRadius = (frame.size.width * 0.08) / 2
         iv.layer.borderWidth = 1
         iv.clipsToBounds = true
         return iv
@@ -59,17 +57,18 @@ class MessageCell: UICollectionViewCell {
         let tv = UITextView()
         tv.layer.cornerRadius = bubbleViewCornerRadius
         tv.isEditable = false
-        tv.backgroundColor = .green
+        tv.backgroundColor = .clear
         tv.font = UIFont.systemFont(ofSize: 16)
         return tv
     }()
     
-    let messageImageView: UIImageView = {
+    lazy var messageImageView: UIImageView = {
         let iv = UIImageView()
         iv.image = UIImage(named: "land")
         iv.contentMode = .scaleToFill
         iv.isHidden = true
         iv.clipsToBounds = true
+        iv.layer.cornerRadius = 16
         return iv
     }()
     
@@ -123,7 +122,7 @@ class MessageCell: UICollectionViewCell {
     func layoutViews() {
         addSubview(chatPartnerImageView)
         chatPartnerImageView.anchor(bottom: bottomAnchor, left: leftAnchor, paddingLeft: 8)
-        chatPartnerImageView.setDimension(wConst: 32, hConst: 32)
+        chatPartnerImageView.setDimension(width: widthAnchor, height: widthAnchor, wMult: 0.08, hMult: 0.08)
         
         addSubview(bubbleView)
         bubbleView.anchor(top: topAnchor)
@@ -137,7 +136,7 @@ class MessageCell: UICollectionViewCell {
         messageImageView.anchor(top: bubbleView.topAnchor, right: bubbleView.rightAnchor, bottom: bubbleView.bottomAnchor, left: bubbleView.leftAnchor)
         
         addSubview(messageTextView)
-        messageTextView.anchor(top: topAnchor, right: bubbleView.rightAnchor, left: bubbleView.leftAnchor)
+        messageTextView.anchor(top: topAnchor, right: bubbleView.rightAnchor, left: bubbleView.leftAnchor, paddingRight: 10, paddingLeft: 10)
         messageTextView.setDimension(height: heightAnchor)
     }
 }
