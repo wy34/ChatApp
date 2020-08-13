@@ -32,6 +32,7 @@ class MessageCell: UICollectionViewCell {
     }
     
     static let reuseId = "messageCell"
+    var chatVC: ChatVC?
     var bubbleViewLeftAnchor: NSLayoutConstraint?
     var bubbleViewRightAnchor: NSLayoutConstraint?
     var bubbleWidthAnchor: NSLayoutConstraint?
@@ -69,6 +70,8 @@ class MessageCell: UICollectionViewCell {
         iv.isHidden = true
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 16
+        iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleFullScreen)))
         return iv
     }()
     
@@ -80,6 +83,13 @@ class MessageCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Selectors
+    @objc func handleFullScreen(tapGesture: UITapGestureRecognizer) {
+        if let imageView = tapGesture.view as? UIImageView {
+            chatVC?.fullScreenImage(startingImageView: imageView)
+        }
     }
     
     // MARK: - ConfigureCell method

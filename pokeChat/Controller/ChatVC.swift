@@ -110,6 +110,28 @@ class ChatVC: UIViewController {
             collectionView.scrollToItem(at: lastIndex, at: .bottom, animated: true)
         }
     }
+    
+    // MARK: - ImageFullScreen method
+    func fullScreenImage(startingImageView: UIImageView) {
+        let startingImageViewFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil) // gives x,y,w,h (startingImageView.frame doesnt give position????)
+        
+        let fullScreenImageView = UIImageView(frame: startingImageViewFrame!)
+        fullScreenImageView.backgroundColor = .red
+        fullScreenImageView.image = startingImageView.image
+        
+        if let keyWindow = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+            let blackBackgroundView = UIView(frame: keyWindow.frame)
+            blackBackgroundView.backgroundColor = .black
+            blackBackgroundView.alpha = 0
+            
+            keyWindow.addSubview(blackBackgroundView)
+            keyWindow.addSubview(fullScreenImageView)
+            
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+                blackBackgroundView.alpha = 1
+            }, completion: nil)
+        }
+    }
 }
 
 // MARK: - UICollectionViewDelegate/Datasource/FlowLayoutDelegate
@@ -122,6 +144,7 @@ extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MessageCell.reuseId, for: indexPath) as! MessageCell
         cell.message = messages[indexPath.item]
         cell.chatPartner = chatPartner
+        cell.chatVC = self
         cell.backgroundColor = .blue
         
         if let text = messages[indexPath.item].message {
