@@ -65,13 +65,12 @@ class MessageCell: UICollectionViewCell {
     
     lazy var messageImageView: UIImageView = {
         let iv = UIImageView()
-        iv.image = UIImage(named: "land")
         iv.contentMode = .scaleToFill
         iv.isHidden = true
         iv.clipsToBounds = true
         iv.layer.cornerRadius = 16
         iv.isUserInteractionEnabled = true
-        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleFullScreen)))
+        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleFullScreen(tapGesture:))))
         return iv
     }()
     
@@ -88,7 +87,7 @@ class MessageCell: UICollectionViewCell {
     // MARK: - Selectors
     @objc func handleFullScreen(tapGesture: UITapGestureRecognizer) {
         if let imageView = tapGesture.view as? UIImageView {
-            chatVC?.fullScreenImage(startingImageView: imageView)
+            chatVC?.fullScreenImage(tappedImage: imageView)
         }
     }
     

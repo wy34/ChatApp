@@ -40,7 +40,7 @@ class MessageInputContainerView: UIView {
         return label
     }()
     
-    private lazy var inputTextView: UITextView = {
+    lazy var inputTextView: UITextView = {
         let tv = UITextView()
         tv.delegate = self
         tv.font = UIFont.preferredFont(forTextStyle: .headline)

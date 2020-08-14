@@ -14,6 +14,12 @@ class ChatVC: UIViewController {
     var inputFieldContainerBottom: NSLayoutConstraint?
     var messages = [Message]()
     
+    // MARK: - Zoom in/out image messages variables
+    var startingImageView: UIImageView?
+    var startingImageViewFrame: CGRect?
+    var fullScreenImageView: UIImageView?
+    var blackBackgroundView: UIView?
+    
     // MARK: - Subviews
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -71,27 +77,6 @@ class ChatVC: UIViewController {
         }
     }
     
-    // MARK: - Selectors
-    @objc func handleKBWilShow(notification: Notification) {
-        if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-            let rect = frame.cgRectValue
-            let height = rect.height
-            
-            inputFieldContainerBottom?.constant = -height
-            view.layoutIfNeeded()
-            scrollToBottom()
-        }
-    }
-    
-    @objc func handleKBWillHide(notification: Notification) {
-        if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
-            UIView.animate(withDuration: duration) {
-                self.inputFieldContainerBottom?.constant = 0
-                self.view.layoutIfNeeded()
-            }
-        }
-    }
-    
     // MARK: - Navbar config
     func setNavbarWithPartnerName() {
         guard let partner = chatPartner else { return }
@@ -112,24 +97,67 @@ class ChatVC: UIViewController {
     }
     
     // MARK: - ImageFullScreen method
-    func fullScreenImage(startingImageView: UIImageView) {
-        let startingImageViewFrame = startingImageView.superview?.convert(startingImageView.frame, to: nil) // gives x,y,w,h (startingImageView.frame doesnt give position????)
-        
-        let fullScreenImageView = UIImageView(frame: startingImageViewFrame!)
-        fullScreenImageView.backgroundColor = .red
-        fullScreenImageView.image = startingImageView.image
+    func fullScreenImage(tappedImage: UIImageView) {
+        startingImageView = tappedImage
+        startingImageViewFrame = tappedImage.superview?.convert(tappedImage.frame, to: nil) // gives x,y,w,h (startingImageView.frame doesnt give position????)
+        tappedImage.isHidden = true
         
         if let keyWindow = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
-            let blackBackgroundView = UIView(frame: keyWindow.frame)
-            blackBackgroundView.backgroundColor = .black
-            blackBackgroundView.alpha = 0
+            fullScreenImageView = UIImageView(frame: startingImageViewFrame!)
+            fullScreenImageView!.isUserInteractionEnabled = true
+            fullScreenImageView!.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissFullScreen(tapGesture:))))
+            fullScreenImageView!.image = tappedImage.image
             
-            keyWindow.addSubview(blackBackgroundView)
-            keyWindow.addSubview(fullScreenImageView)
+            blackBackgroundView = UIView(frame: keyWindow.frame)
+            blackBackgroundView!.backgroundColor = .black
+            blackBackgroundView!.alpha = 0
+            
+            keyWindow.addSubview(blackBackgroundView!)
+            keyWindow.addSubview(fullScreenImageView!)
             
             UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-                blackBackgroundView.alpha = 1
+                self.inputFieldContainer.inputTextView.resignFirstResponder()
+                self.blackBackgroundView!.alpha = 1
+                let fullScreenImageHeight = (tappedImage.frame.height / tappedImage.frame.width) * keyWindow.frame.width
+                self.fullScreenImageView!.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: fullScreenImageHeight)
+                self.fullScreenImageView!.center = keyWindow.center
             }, completion: nil)
+        }
+    }
+    
+    // MARK: - Selectors
+    @objc func dismissFullScreen(tapGesture: UITapGestureRecognizer) {
+        if let fullScreenImageView = tapGesture.view as? UIImageView {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+                fullScreenImageView.frame = self.startingImageViewFrame!
+                self.blackBackgroundView!.alpha = 0
+                fullScreenImageView.layer.cornerRadius = 16
+                fullScreenImageView.clipsToBounds = true
+            }) { (Bool) in
+                self.startingImageView?.isHidden = false
+                fullScreenImageView.removeFromSuperview()
+                self.blackBackgroundView?.removeFromSuperview()
+            }
+        }
+    }
+    
+    @objc func handleKBWilShow(notification: Notification) {
+        if let frame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+            let rect = frame.cgRectValue
+            let height = rect.height
+            
+            inputFieldContainerBottom?.constant = -height
+            view.layoutIfNeeded()
+            scrollToBottom()
+        }
+    }
+    
+    @objc func handleKBWillHide(notification: Notification) {
+        if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? Double {
+            UIView.animate(withDuration: duration) {
+                self.inputFieldContainerBottom?.constant = 0
+                self.view.layoutIfNeeded()
+            }
         }
     }
 }
