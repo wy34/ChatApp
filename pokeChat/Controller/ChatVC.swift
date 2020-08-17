@@ -206,6 +206,10 @@ extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
 
 // MARK: - InputContainerViewDelegate
 extension ChatVC: InputContainerViewDelegate {
+    func present(optionSheet: UIAlertController) {
+        present(optionSheet, animated: true)
+    }
+    
     func dismissImagePicker() {
         self.dismiss(animated: true, completion: nil)
     }

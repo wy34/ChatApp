@@ -13,6 +13,7 @@ protocol InputContainerViewDelegate {
     func moveMessagesAboveInputContainer()
     func present(imagePicker: UIImagePickerController)
     func dismissImagePicker()
+    func present(optionSheet: UIAlertController)
 }
 
 class MessageInputContainerView: UIView {
@@ -57,7 +58,7 @@ class MessageInputContainerView: UIView {
         let largeFont = UIImage.SymbolConfiguration(font: UIFont.systemFont(ofSize: 20))
         button.setImage(UIImage(systemName: "photo", withConfiguration: largeFont), for: .normal)
         button.tintColor = Constants.Color.customGray
-        button.addTarget(self, action: #selector(handleImagePicker), for: .touchUpInside)
+        button.addTarget(self, action: #selector(showImagePickerOptions), for: .touchUpInside)
         return button
     }()
     
@@ -106,6 +107,14 @@ class MessageInputContainerView: UIView {
         addGestureRecognizer(swipeDown)
     }
     
+    // MARK: - Helper methods
+    func open(_ sourceType: UIImagePickerController.SourceType) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType =  sourceType
+        delegate?.present(imagePicker: imagePicker)
+    }
+    
     // MARK: - Selectors
     @objc func handleSend() {
         if let message = inputTextView.text, !message.isEmpty {
@@ -117,12 +126,21 @@ class MessageInputContainerView: UIView {
         inputTextView.resignFirstResponder()
     }
     
-    @objc func handleImagePicker() {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.allowsEditing = true
-        delegate?.present(imagePicker: imagePicker)
+    @objc func showImagePickerOptions() {
+        let alertController = UIAlertController(title: "Choose your Image", message: nil, preferredStyle: .actionSheet)
+        let libraryAction = UIAlertAction(title: "Choose from Library", style: .default) { (action) in
+            self.open(.photoLibrary)
+        }
+        let cameraAction = UIAlertAction(title: "Take from Camera", style: .default) { (action) in
+            self.open(.camera)
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(libraryAction)
+        alertController.addAction(cameraAction)
+        alertController.addAction(cancelAction)
+        
+        delegate?.present(optionSheet: alertController)
     }
 }
 
@@ -157,7 +175,7 @@ extension MessageInputContainerView: UITextViewDelegate {
 // MARK: - UIImagePickerControllerDelegate/UINavigationControllerDelegate
 extension MessageInputContainerView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let selectedImage = info[.editedImage] as? UIImage else { return }
+        guard let selectedImage = info[.originalImage] as? UIImage else { return }
         DatabaseManager.shared.store(image: selectedImage) { (result) in
             switch result {
             case .success(let imageUrlString):
