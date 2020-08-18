@@ -107,11 +107,12 @@ class ChatVC: UIViewController {
             fullScreenImageView!.isUserInteractionEnabled = true
             fullScreenImageView!.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(dismissFullScreen(tapGesture:))))
             fullScreenImageView!.image = tappedImage.image
+            fullScreenImageView?.enablePinchToZoom()
             
             blackBackgroundView = UIView(frame: keyWindow.frame)
             blackBackgroundView!.backgroundColor = .black
             blackBackgroundView!.alpha = 0
-            
+        
             keyWindow.addSubview(blackBackgroundView!)
             keyWindow.addSubview(fullScreenImageView!)
             
@@ -238,3 +239,10 @@ extension ChatVC: InputContainerViewDelegate {
     }
 }
 
+
+
+extension ChatVC: UIScrollViewDelegate {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return fullScreenImageView
+    }
+}
