@@ -119,6 +119,7 @@ class MessageCell: UICollectionViewCell {
         
         videoPlayer = AVPlayer(url: videoUrl)
         playerLayer = AVPlayerLayer(player: videoPlayer)
+        videoPlayer?.addObserver(self, forKeyPath: "currentItem.loadedTimeRanges", options: .new, context: nil)
         bubbleView.layer.addSublayer(playerLayer!)
         playerLayer!.frame = bubbleView.bounds
         playerLayer!.cornerRadius = 16
@@ -126,12 +127,19 @@ class MessageCell: UICollectionViewCell {
         videoPlayer!.play()
     }
     
-    // MARK: - <#Section Heading#>
+    // MARK: - PrepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
         playerLayer?.removeFromSuperlayer()
         videoPlayer?.pause()
         loadingIndicator.stopAnimating()
+    }
+    
+    // MARK: - KeyValueObservers
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "currentItem.loadedTimeRanges" {
+            self.loadingIndicator.stopAnimating()
+        }
     }
     
     // MARK: - ConfigureCell method
