@@ -22,11 +22,17 @@ class ConversationCell: UITableViewCell {
             DatabaseManager.shared.getUserWith(id: chatPartnerId) { (result) in
                 switch result {
                 case .success(let user):
-                    self.nameLabel.text = user.name
-                    self.previewEmailLabel.text = message.message
                     self.timeLabel.text = self.getDateAndTimeStringFrom(seconds: message.timeSent!)
-
+                    self.nameLabel.text = user.name
                     
+                    if let message = message.message {
+                        self.previewEmailLabel.text = message
+                    } else if let _ = message.videoUrl {
+                        self.previewEmailLabel.text = "[Video]"
+                    } else {
+                        self.previewEmailLabel.text = "[Image]"
+                    }
+
                     if let imageUrl = user.imageUrl {
                         NetworkManager.shared.downloadImage(forUrl: imageUrl) { (result) in
                             switch result {

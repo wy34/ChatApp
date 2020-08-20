@@ -17,6 +17,8 @@ class Message {
     var imageUrl: String?
     var imageHeight: Int?
     var imageWidth: Int?
+    var thumbnailImageUrl: String?
+    var videoUrl: String?
     
     var chatPartnerId: String? {
         return Auth.auth().currentUser?.uid == fromId ? toId! : fromId!
@@ -30,5 +32,7 @@ class Message {
         self.imageUrl = dictionary["imageUrl"] as? String
         self.imageWidth = dictionary["imageWidth"] as? Int
         self.imageHeight = dictionary["imageHeight"] as? Int
+        self.thumbnailImageUrl = dictionary["thumbnailImageUrl"] as? String
+        self.videoUrl = dictionary["videoUrl"] as? String
     }
 }

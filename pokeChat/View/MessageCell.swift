@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import AVFoundation
 
 class MessageCell: UICollectionViewCell {
     // MARK: - Properties
@@ -37,6 +38,8 @@ class MessageCell: UICollectionViewCell {
     var bubbleViewRightAnchor: NSLayoutConstraint?
     var bubbleWidthAnchor: NSLayoutConstraint?
     let bubbleViewCornerRadius: CGFloat = 16
+    var videoPlayer: AVPlayer?
+    var playerLayer: AVPlayerLayer?
     
     // MARK: - Subviews
     lazy var bubbleView: UIView = {
@@ -74,6 +77,23 @@ class MessageCell: UICollectionViewCell {
         return iv
     }()
     
+    private lazy var playButton: UIImageView = {
+        let iv = UIImageView()
+        iv.tintColor = .white
+        iv.image = UIImage(systemName: "play.circle.fill")
+        iv.isHidden = true
+        iv.isUserInteractionEnabled = true
+        iv.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handlePlay)))
+        return iv
+    }()
+    
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.style = UIActivityIndicatorView.Style.large
+        spinner.color = .white
+        return spinner
+    }()
+    
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -91,9 +111,33 @@ class MessageCell: UICollectionViewCell {
         }
     }
     
+    @objc func handlePlay() {
+        guard let videoUrlString = message?.videoUrl, let videoUrl = URL(string: videoUrlString) else { return }
+        
+        playButton.isHidden = true
+        loadingIndicator.startAnimating()
+        
+        videoPlayer = AVPlayer(url: videoUrl)
+        playerLayer = AVPlayerLayer(player: videoPlayer)
+        bubbleView.layer.addSublayer(playerLayer!)
+        playerLayer!.frame = bubbleView.bounds
+        playerLayer!.cornerRadius = 16
+        playerLayer!.masksToBounds = true
+        videoPlayer!.play()
+    }
+    
+    // MARK: - <#Section Heading#>
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        playerLayer?.removeFromSuperlayer()
+        videoPlayer?.pause()
+        loadingIndicator.stopAnimating()
+    }
+    
     // MARK: - ConfigureCell method
     func configureCell() {
         guard let messageObj = self.message else { return }
+        playButton.isHidden = messageObj.videoUrl != nil ? false : true
         
         if let messageText = messageObj.message {
             messageImageView.isHidden = true
@@ -101,6 +145,17 @@ class MessageCell: UICollectionViewCell {
             messageTextView.text = messageText
         } else if messageObj.imageUrl != nil {
             NetworkManager.shared.downloadImage(forUrl: messageObj.imageUrl!) { (result) in
+                switch result {
+                    case .success(let image):
+                        self.messageImageView.isHidden = false
+                        self.messageTextView.isHidden = true
+                        self.messageImageView.image = image
+                    case .failure(let error):
+                        print(error.rawValue)
+                }
+            }
+        } else if messageObj.thumbnailImageUrl != nil {
+            NetworkManager.shared.downloadImage(forUrl: messageObj.thumbnailImageUrl!) { (result) in
                 switch result {
                     case .success(let image):
                         self.messageImageView.isHidden = false
@@ -147,6 +202,13 @@ class MessageCell: UICollectionViewCell {
         addSubview(messageTextView)
         messageTextView.anchor(top: topAnchor, right: bubbleView.rightAnchor, left: bubbleView.leftAnchor, paddingRight: 10, paddingLeft: 10)
         messageTextView.setDimension(height: heightAnchor)
+        
+        addSubview(playButton)
+        playButton.setDimension(width: bubbleView.widthAnchor, height: bubbleView.widthAnchor, wMult: 0.2, hMult: 0.2)
+        playButton.center(x: bubbleView.centerXAnchor, y: bubbleView.centerYAnchor)
+        
+        addSubview(loadingIndicator)
+        loadingIndicator.center(x: bubbleView.centerXAnchor, y: bubbleView.centerYAnchor)
     }
 }
 

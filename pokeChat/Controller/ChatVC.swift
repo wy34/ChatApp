@@ -178,7 +178,7 @@ extension ChatVC: UICollectionViewDelegate, UICollectionViewDataSource, UICollec
         
         if let text = messages[indexPath.item].message {
             cell.bubbleWidthAnchor?.constant = estimateFrameForText(text: text).width + 32
-        } else if messages[indexPath.item].imageUrl != nil {
+        } else if messages[indexPath.item].imageUrl != nil || messages[indexPath.item].thumbnailImageUrl != nil {
             cell.bubbleWidthAnchor?.constant = 250
         }
         
@@ -236,13 +236,5 @@ extension ChatVC: InputContainerViewDelegate {
                 print(error.rawValue)
             }
         }
-    }
-}
-
-
-
-extension ChatVC: UIScrollViewDelegate {
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return fullScreenImageView
     }
 }

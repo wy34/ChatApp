@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import MobileCoreServices
+import AVFoundation
+import FirebaseStorage
 
 protocol InputContainerViewDelegate {
     func send(message: String, inputField: UITextView)
@@ -62,6 +65,15 @@ class MessageInputContainerView: UIView {
         return button
     }()
     
+    var loadingBackgroundView = UIView()
+    
+    private let loadingIndictaor: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView()
+        spinner.style = UIActivityIndicatorView.Style.large
+        spinner.color = .white
+        return spinner;
+    }()
+    
     private let inputContainerBorder = SeparatorView(backgroundColor: .lightGray)
     
     // MARK: - Initializers
@@ -112,7 +124,36 @@ class MessageInputContainerView: UIView {
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType =  sourceType
+        imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeMovie as String]
         delegate?.present(imagePicker: imagePicker)
+    }
+    
+    func showLoadingScreen() {
+        if let keyWindow = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+            loadingBackgroundView = UIView(frame: keyWindow.frame)
+            loadingBackgroundView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.695125214)
+            keyWindow.addSubview(loadingBackgroundView)
+            loadingBackgroundView.center = keyWindow.center
+            
+            keyWindow.addSubview(loadingIndictaor)
+            loadingIndictaor.center = keyWindow.center
+            loadingIndictaor.startAnimating()
+        }
+    }
+    
+    func generateThumbnailImageForUrl(_ fileUrl: URL) -> UIImage? {
+        let asset = AVAsset(url: fileUrl)
+        let imageGenerator = AVAssetImageGenerator(asset: asset)
+        imageGenerator.appliesPreferredTrackTransform = true
+        
+        do {
+            let thumbnailImage = try imageGenerator.copyCGImage(at: CMTime(value: 1, timescale: 60), actualTime: nil)
+            return UIImage(cgImage: thumbnailImage)
+        } catch {
+            print(error)
+        }
+        
+        return nil
     }
     
     // MARK: - Selectors
@@ -175,22 +216,71 @@ extension MessageInputContainerView: UITextViewDelegate {
 // MARK: - UIImagePickerControllerDelegate/UINavigationControllerDelegate
 extension MessageInputContainerView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let selectedImage = info[.originalImage] as? UIImage else { return }
-        DatabaseManager.shared.store(image: selectedImage) { (result) in
-            switch result {
-            case .success(let imageUrlString):
-                guard let chatPartnerId = self.chatPartner?.id else { return }
-                let properties = ["imageUrl": imageUrlString, "imageHeight": selectedImage.size.height, "imageWidth": selectedImage.size.width] as [String: AnyObject]
-                DatabaseManager.shared.addMessage(withProperties: properties, toId: chatPartnerId) { (result) in
-                    switch result {
-                    case .success(_):
-                        self.delegate?.dismissImagePicker()
-                    case .failure(let error):
-                        print(error.rawValue)
+        showLoadingScreen()
+    
+        if let videoUrl = info[.mediaURL] as? URL {
+            let fileName = UUID().uuidString + ".mov"
+            let storageRef = Storage.storage().reference().child("movie_messages").child("\(fileName)")
+            
+            if let videoData = try? Data(contentsOf: videoUrl) {
+                let task = storageRef.putData(videoData, metadata: nil) { (metadata, error) in
+                    if let _ = error {
+                        print("error putting video data")
+                        return
+                    }
+                    
+                    storageRef.downloadURL { (url, error) in
+                        if let _ = error {
+                            print("error downloading video url")
+                            return
+                        }
+                        
+                        if let url = url {
+                            if let thumbnailImage = self.generateThumbnailImageForUrl(videoUrl) {
+                                DatabaseManager.shared.store(image: thumbnailImage, inDirectory: "videoThumbnail") { (result) in
+                                    switch result {
+                                        case .success(let imageUrlString):
+                                            guard let chatPartnerId = self.chatPartner?.id else { return }
+                                            let properties = ["thumbnailImageUrl": imageUrlString, "imageWidth": thumbnailImage.size.width, "imageHeight": thumbnailImage.size.height, "videoUrl": url.absoluteString] as [String: AnyObject]
+                                            DatabaseManager.shared.addMessage(withProperties: properties, toId: chatPartnerId) { (result) in
+                                                switch result {
+                                                case .success(_):
+                                                    self.loadingIndictaor.stopAnimating()
+                                                    self.loadingBackgroundView.removeFromSuperview()
+                                                    self.delegate?.dismissImagePicker()
+                                                case .failure(let error):
+                                                    print(error.rawValue)
+                                                }
+                                        }
+                                        case .failure(let error):
+                                            print(error.rawValue)
+                                        }
+                                }
+                            }
+                        }
                     }
                 }
-            case .failure(let error):
-                print(error.rawValue)
+            }
+        } else {
+            guard let selectedImage = info[.originalImage] as? UIImage else { return }
+            DatabaseManager.shared.store(image: selectedImage, inDirectory: "messageImages") { (result) in
+                switch result {
+                case .success(let imageUrlString):
+                    guard let chatPartnerId = self.chatPartner?.id else { return }
+                    let properties = ["imageUrl": imageUrlString, "imageHeight": selectedImage.size.height, "imageWidth": selectedImage.size.width] as [String: AnyObject]
+                    DatabaseManager.shared.addMessage(withProperties: properties, toId: chatPartnerId) { (result) in
+                        switch result {
+                        case .success(_):
+                            self.loadingIndictaor.stopAnimating()
+                            self.loadingBackgroundView.removeFromSuperview()
+                            self.delegate?.dismissImagePicker()
+                        case .failure(let error):
+                            print(error.rawValue)
+                        }
+                    }
+                case .failure(let error):
+                    print(error.rawValue)
+                }
             }
         }
     }

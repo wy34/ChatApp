@@ -133,9 +133,9 @@ class DatabaseManager {
         }
     }
     
-    func store(image: UIImage, completion: @escaping (Result<String, ErrorMessage>) -> Void) {
+    func store(image: UIImage, inDirectory folder: String, completion: @escaping (Result<String, ErrorMessage>) -> Void) {
         let imageName = UUID()
-        let ref = Storage.storage().reference().child("messageImages").child("\(imageName)")
+        let ref = Storage.storage().reference().child(folder).child("\(imageName)")
         guard let imageData = image.jpegData(compressionQuality: 0.2) else { return }
         
         ref.putData(imageData, metadata: nil) { (metaData, error) in
