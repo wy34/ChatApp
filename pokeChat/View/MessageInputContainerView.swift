@@ -24,6 +24,7 @@ class MessageInputContainerView: UIView {
     var delegate: InputContainerViewDelegate?
     var inputTextViewBottomAnchor: NSLayoutConstraint?
     var chatPartner: User?
+    var recordingWindow: RecordingView?
     
     // MARK: - Subviews
     private let sendButton: UIButton = {
@@ -56,12 +57,12 @@ class MessageInputContainerView: UIView {
         return tv
     }()
     
-    private let photoPickerButton: UIButton = {
+    private let mediaPickerButton: UIButton = {
         let button = UIButton(type: .system)
         let largeFont = UIImage.SymbolConfiguration(font: UIFont.systemFont(ofSize: 20))
-        button.setImage(UIImage(systemName: "photo", withConfiguration: largeFont), for: .normal)
+        button.setImage(UIImage(systemName: "plus.circle", withConfiguration: largeFont), for: .normal)
         button.tintColor = Constants.Color.customGray
-        button.addTarget(self, action: #selector(showImagePickerOptions), for: .touchUpInside)
+        button.addTarget(self, action: #selector(showMediaPickerOptions), for: .touchUpInside)
         return button
     }()
     
@@ -104,8 +105,8 @@ class MessageInputContainerView: UIView {
         sendButton.setDimension(wConst: 27, hConst: 27)
         sendButton.anchor(right: inputTextView.rightAnchor, bottom: inputTextView.bottomAnchor, paddingRight: 5, paddingBottom: 5)
         
-        addSubview(photoPickerButton)
-        photoPickerButton.anchor(right: inputTextView.leftAnchor, bottom: inputTextView.bottomAnchor, left: leftAnchor, paddingRight: 10, paddingBottom: 5, paddingLeft: 10)
+        addSubview(mediaPickerButton)
+        mediaPickerButton.anchor(right: inputTextView.leftAnchor, bottom: inputTextView.bottomAnchor, left: leftAnchor, paddingRight: 10, paddingBottom: 5, paddingLeft: 10)
 
         addSubview(inputContainerBorder)
         inputContainerBorder.anchor(top: topAnchor, right: rightAnchor, left: leftAnchor)
@@ -167,18 +168,36 @@ class MessageInputContainerView: UIView {
         inputTextView.resignFirstResponder()
     }
     
-    @objc func showImagePickerOptions() {
-        let alertController = UIAlertController(title: "Choose your Image", message: nil, preferredStyle: .actionSheet)
+    @objc func showMediaPickerOptions() {
+        inputTextView.resignFirstResponder()
+        
+        let alertController = UIAlertController(title: "Select an option", message: nil, preferredStyle: .actionSheet)
         let libraryAction = UIAlertAction(title: "Choose from Library", style: .default) { (action) in
             self.open(.photoLibrary)
         }
         let cameraAction = UIAlertAction(title: "Take from Camera", style: .default) { (action) in
             self.open(.camera)
         }
+        let recordAction = UIAlertAction(title: "Voice Input", style: .default) { (action) in
+            if let keyWindow = UIApplication.shared.windows.filter({$0.isKeyWindow}).first {
+                self.loadingBackgroundView = UIView(frame: keyWindow.frame)
+                self.loadingBackgroundView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0.695125214)
+                keyWindow.addSubview(self.loadingBackgroundView)
+                self.loadingBackgroundView.center = keyWindow.center
+                
+                self.recordingWindow = RecordingView()
+                self.recordingWindow?.delegate = self
+                keyWindow.addSubview(self.recordingWindow!)
+                self.recordingWindow!.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width * 0.75, height: 150)
+                self.recordingWindow!.center = keyWindow.center
+            }
+            
+        }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
         alertController.addAction(libraryAction)
         alertController.addAction(cameraAction)
+        alertController.addAction(recordAction)
         alertController.addAction(cancelAction)
         
         delegate?.present(optionSheet: alertController)
@@ -213,6 +232,14 @@ extension MessageInputContainerView: UITextViewDelegate {
     }
 }
 
+// MARK: - RecordingWindowDelegate
+extension MessageInputContainerView: RecordingViewDelegate {
+    func dismiss(view: RecordingView) {
+        view.removeFromSuperview()
+        loadingBackgroundView.removeFromSuperview()
+    }
+}
+
 // MARK: - UIImagePickerControllerDelegate/UINavigationControllerDelegate
 extension MessageInputContainerView: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -223,7 +250,7 @@ extension MessageInputContainerView: UIImagePickerControllerDelegate, UINavigati
             let storageRef = Storage.storage().reference().child("movie_messages").child("\(fileName)")
             
             if let videoData = try? Data(contentsOf: videoUrl) {
-                let task = storageRef.putData(videoData, metadata: nil) { (metadata, error) in
+                storageRef.putData(videoData, metadata: nil) { (metadata, error) in
                     if let _ = error {
                         print("error putting video data")
                         return

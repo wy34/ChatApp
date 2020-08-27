@@ -10,6 +10,7 @@
 		3D25B61024EB772300F79698 /* Ext - UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D25B60F24EB772300F79698 /* Ext - UIImageView.swift */; };
 		3D2F992924D4EF9D00CB3E67 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D2F992824D4EF9D00CB3E67 /* LoginVC.swift */; };
 		3D3356E624D3B7AB0039F642 /* ClearNavBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3356E524D3B7AB0039F642 /* ClearNavBarViewController.swift */; };
+		3D3B39B524F615FC007B88BD /* RecordingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D3B39B424F615FC007B88BD /* RecordingView.swift */; };
 		3D4183F524C7F73500B39E92 /* LoginRegisterTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D4183F424C7F73500B39E92 /* LoginRegisterTextField.swift */; };
 		3D72E38B24C92F7C006A00B8 /* SeparatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */; };
 		3D72E38D24C930B4006A00B8 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3D72E38C24C930B4006A00B8 /* CustomButton.swift */; };
@@ -45,6 +46,7 @@
 		3D25B60F24EB772300F79698 /* Ext - UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Ext - UIImageView.swift"; sourceTree = "<group>"; };
 		3D2F992824D4EF9D00CB3E67 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 		3D3356E524D3B7AB0039F642 /* ClearNavBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClearNavBarViewController.swift; sourceTree = "<group>"; };
+		3D3B39B424F615FC007B88BD /* RecordingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingView.swift; sourceTree = "<group>"; };
 		3D4183F424C7F73500B39E92 /* LoginRegisterTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterTextField.swift; sourceTree = "<group>"; };
 		3D72E38A24C92F7C006A00B8 /* SeparatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorView.swift; sourceTree = "<group>"; };
 		3D72E38C24C930B4006A00B8 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				3DFC60BF24D26F3500520936 /* ContinueButtonContainerView.swift */,
 				3D3356E524D3B7AB0039F642 /* ClearNavBarViewController.swift */,
 				3DCB5FA524D76416000BA18A /* MessageCell.swift */,
+				3D3B39B424F615FC007B88BD /* RecordingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -357,6 +360,7 @@
 				3D86B8E824CD2BAC00E16198 /* ConversationCell.swift in Sources */,
 				3D86B8E624CD27FE00E16198 /* NewMessageVC.swift in Sources */,
 				3DE249FE24CBCA4E006D9493 /* ErrorMessage.swift in Sources */,
+				3D3B39B524F615FC007B88BD /* RecordingView.swift in Sources */,
 				3DE249FC24CBBF22006D9493 /* AuthManager.swift in Sources */,
 				3DE24A0224CBE44E006D9493 /* User.swift in Sources */,
 				3DDE0ACB24C7DB31008FB508 /* AppDelegate.swift in Sources */,
@@ -529,7 +533,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = YNSMJAS38V;
+				DEVELOPMENT_TEAM = 62HGT66B46;
 				INFOPLIST_FILE = pokeChat/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
