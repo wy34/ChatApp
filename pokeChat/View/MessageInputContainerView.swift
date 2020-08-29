@@ -234,6 +234,10 @@ extension MessageInputContainerView: UITextViewDelegate {
 
 // MARK: - RecordingWindowDelegate
 extension MessageInputContainerView: RecordingViewDelegate {
+    func presentFailureAlert(_ alert: UIAlertController) {
+        delegate?.present(optionSheet: alert)
+    }
+    
     func dismiss(view: RecordingView) {
         view.removeFromSuperview()
         loadingBackgroundView.removeFromSuperview()

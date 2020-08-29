@@ -11,12 +11,14 @@ import AVFoundation
 
 protocol RecordingViewDelegate {
     func dismiss(view: RecordingView)
+    func presentFailureAlert(_ alert: UIAlertController)
 }
 
 class RecordingView: UIView {
     // MARK: - Constants/Variables
     var audioSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
+    var audioPlayer: AVAudioPlayer!
     var isRecording = false
     var delegate: RecordingViewDelegate?
     
@@ -96,8 +98,7 @@ class RecordingView: UIView {
                 }
             }
         } catch {
-            self.showAudioSessionFailureAlert()
-            // do something to address the failed recording session
+            self.showFailureAlert(withTitle: "Try again", andMessage: "Please make sure you have microphone access enabled")
         }
     }
     
@@ -121,12 +122,43 @@ class RecordingView: UIView {
         sendButton.center(to: dismissButton, by: .centerY)
     }
     
-    // MARK: - Helper methods
-    func showAudioSessionFailureAlert() {
-        
+    // MARK: - Selector
+    @objc func recordTapped() {
+        if !isRecording {
+            startRecording()
+        } else {
+            finishRecording(success: true)
+        }
     }
     
-    func generateAudioUrl() -> URL {
+    @objc func playbackTapped() {
+        let audioUrl = generateAudioSaveUrl()
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioUrl)
+            audioPlayer.play()
+        } catch {
+            showFailureAlert(withTitle: "Playback failed", andMessage: "There was a problem playing your whistle; please try re-recording.")
+        }
+    }
+    
+    @objc func sendRecording() {
+        // get the url out of document directory and send to firebase storage
+        print("Sending recording")
+    }
+    
+    @objc func dismissRecordingWindow() {
+        delegate?.dismiss(view: self)
+    }
+    
+    // MARK: - Helper methods
+    func showFailureAlert(withTitle title: String, andMessage message: String) {
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        delegate?.presentFailureAlert(ac)
+    }
+    
+    func generateAudioSaveUrl() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         let documentDirectory = paths[0]
         return documentDirectory.appendingPathComponent("audio.m4a")
@@ -141,7 +173,7 @@ class RecordingView: UIView {
         playbackButton.isHidden = true
         sendButton.isEnabled = false
         
-        let audioUrl = generateAudioUrl() // where to save audio
+        let audioUrl = generateAudioSaveUrl() // where to save audio
         
         let settings = [
             AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
@@ -172,26 +204,5 @@ class RecordingView: UIView {
             recordingLabel.text = "Try again"
             recordButton.setTitle("Tap to Record", for: .normal)
         }
-    }
-    
-    // MARK: - Selector
-    @objc func recordTapped() {
-        if !isRecording {
-            startRecording()
-        } else {
-            finishRecording(success: true)
-        }
-    }
-    
-    @objc func playbackTapped() {
-        
-    }
-    
-    @objc func sendRecording() {
-        print("Sending recording")
-    }
-    
-    @objc func dismissRecordingWindow() {
-        delegate?.dismiss(view: self)
     }
 }
