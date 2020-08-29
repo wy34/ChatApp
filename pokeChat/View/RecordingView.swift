@@ -17,11 +17,40 @@ class RecordingView: UIView {
     // MARK: - Constants/Variables
     var audioSession: AVAudioSession!
     var audioRecorder: AVAudioRecorder!
+    var isRecording = false
     var delegate: RecordingViewDelegate?
     
     // MARK: - Subviews
-    private let sendButton = CustomButton(title: "Send", textColor: .white, bgColor: .black)
-    private let recordButton = CustomButton(title: "Tap to record", textColor: .white, bgColor: .black)
+    private let recordButton: CustomButton = {
+        let button = CustomButton(title: "Tap to record", textColor: .white, bgColor: .gray)
+        button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(recordTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private let playbackButton: CustomButton = {
+        let button = CustomButton(title: "Play", textColor: .white, bgColor: .systemGreen)
+        button.layer.cornerRadius = 10
+        button.addTarget(self, action: #selector(playbackTapped), for: .touchUpInside)
+        return button
+    }()
+    
+    private lazy var buttonStack: UIStackView = {
+        let stack = UIStackView(arrangedSubviews: [recordButton])
+        stack.distribution = .fillEqually
+        stack.spacing = 10
+        return stack
+    }()
+    
+    private let sendButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Send", for: .normal)
+        button.tintColor = .black
+        button.layer.cornerRadius = 10
+        button.isEnabled = false
+        button.addTarget(self, action: #selector(sendRecording), for: .touchUpInside)
+        return button
+    }()
     
     private let dismissButton: UIButton = {
         let button = UIButton(type: .system)
@@ -31,15 +60,22 @@ class RecordingView: UIView {
         return button
     }()
     
+    private let recordingLabel: UILabel = {
+        let label = UILabel()
+//        label.text = "Recording..."
+        label.isHidden = true
+        label.textColor = .black
+        return label
+    }()
+    
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
         layer.cornerRadius = 10
         anchorSubviews()
-        
-        sendButton.layer.cornerRadius = 10
-        recordButton.layer.cornerRadius = 10
+        setupAudioSession()
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
     }
     
     required init?(coder: NSCoder) {
@@ -53,23 +89,27 @@ class RecordingView: UIView {
             try audioSession.setCategory(.playAndRecord)
             try audioSession.setActive(true)
             audioSession.requestRecordPermission { (granted) in
-                if granted {
-                    // allow user to continue
-                } else {
-                    // dismiss recording window without doing anything
+                if !granted {
+                    DispatchQueue.main.async {
+                        self.delegate?.dismiss(view: self)
+                    }
                 }
             }
         } catch {
-            
+            self.showAudioSessionFailureAlert()
+            // do something to address the failed recording session
         }
     }
     
     // MARK: - Layout
     func anchorSubviews() {
-        addSubview(recordButton)
-        recordButton.setDimension(width: widthAnchor, height: heightAnchor, wMult: 0.5, hMult: 0.2)
-        recordButton.anchor(bottom: bottomAnchor, paddingBottom: 20)
-        recordButton.center(x: centerXAnchor)
+        addSubview(recordingLabel)
+        recordingLabel.center(x: centerXAnchor, y: centerYAnchor, yPadding: -10)
+        
+        addSubview(buttonStack)
+        buttonStack.setDimension(width: widthAnchor, height: heightAnchor, wMult: 0.9, hMult: 0.2)
+        buttonStack.anchor(bottom: bottomAnchor, paddingBottom: 20)
+        buttonStack.center(x: centerXAnchor)
         
         addSubview(dismissButton)
         dismissButton.anchor(top: topAnchor, left: leftAnchor, paddingTop: 10, paddingLeft: 10)
@@ -81,7 +121,76 @@ class RecordingView: UIView {
         sendButton.center(to: dismissButton, by: .centerY)
     }
     
+    // MARK: - Helper methods
+    func showAudioSessionFailureAlert() {
+        
+    }
+    
+    func generateAudioUrl() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let documentDirectory = paths[0]
+        return documentDirectory.appendingPathComponent("audio.m4a")
+    }
+    
+    func startRecording(){
+        isRecording.toggle()
+        recordingLabel.text = "Recording..."
+        recordingLabel.isHidden = false
+        recordButton.setTitle("Tap to stop", for: .normal)
+        recordButton.backgroundColor = .black
+        playbackButton.isHidden = true
+        sendButton.isEnabled = false
+        
+        let audioUrl = generateAudioUrl() // where to save audio
+        
+        let settings = [
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVSampleRateKey: 12000,
+            AVNumberOfChannelsKey: 1,
+            AVEncoderAudioQualityKey: AVAudioQuality.high.rawValue
+        ]
+        
+        do {
+            self.audioRecorder = try AVAudioRecorder(url: audioUrl, settings: settings)
+            self.audioRecorder.record()
+        } catch {
+            finishRecording(success: false)
+        }
+    }
+    
+    func finishRecording(success: Bool) {
+        isRecording.toggle()
+        recordButton.backgroundColor = .gray
+        
+        if success {
+            sendButton.isEnabled = true
+            playbackButton.isHidden = false
+            recordingLabel.text = "Finished!"
+            recordButton.setTitle("Tap to re-record", for: .normal)
+            buttonStack.addArrangedSubview(playbackButton)
+        } else {
+            recordingLabel.text = "Try again"
+            recordButton.setTitle("Tap to Record", for: .normal)
+        }
+    }
+    
     // MARK: - Selector
+    @objc func recordTapped() {
+        if !isRecording {
+            startRecording()
+        } else {
+            finishRecording(success: true)
+        }
+    }
+    
+    @objc func playbackTapped() {
+        
+    }
+    
+    @objc func sendRecording() {
+        print("Sending recording")
+    }
+    
     @objc func dismissRecordingWindow() {
         delegate?.dismiss(view: self)
     }
